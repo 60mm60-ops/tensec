@@ -6,25 +6,25 @@
 <title>10sec — 10-Second Animation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&family=DM+Mono:wght@400;500&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root{
-  --bg:#E7ECF1; --panel:#FFFFFF; --ink:#15242E; --muted:#5C6E7B;
-  --line:#D6DEE6; --line2:#E8EDF1;
-  --accent:#007BBB; --accent-press:#015E92; --accent-soft:#E0EEF7;
-  --key:#426579; --key-press:#33505F; --key-soft:#E3ECF1;
-  --stage:#F4F8FA;
-  --topA:#13222D; --topB:#244B62;
-  --r:14px; --r-sm:10px;
-  --shadow:0 1px 2px rgba(16,32,44,.07), 0 10px 28px rgba(16,32,44,.09);
+  --bg:#E9EAED; --panel:#FFFFFF; --ink:#191C20; --muted:#6A7077;
+  --line:#DCDEE3; --line2:#ECEDF0;
+  --accent:#FF5C2B; --accent-press:#E8431A; --accent-soft:#FFE7DF;
+  --key:#3A3F46; --key-press:#2A2E34; --key-soft:#ECEDF0;
+  --stage:#F6F7F8;
+  --topA:#17191D; --topB:#262A30;
+  --r:10px; --r-sm:8px;
+  --shadow:0 1px 2px rgba(16,18,22,.10), 0 6px 18px rgba(16,18,22,.10);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
   margin:0; background:var(--bg); color:var(--ink);
-  font-family:"M PLUS Rounded 1c",system-ui,sans-serif;
+  font-family:"Inter","Noto Sans JP",system-ui,sans-serif;
   -webkit-font-smoothing:antialiased; overflow:hidden;
 }
 .mono{font-family:"DM Mono",ui-monospace,monospace}
@@ -38,7 +38,7 @@ input,select{font-family:inherit}
   display:flex; align-items:center; gap:14px;
   background:linear-gradient(120deg,var(--topA),var(--topB)); color:#F4F8FB;
   border-radius:var(--r); padding:10px 16px;
-  box-shadow:0 1px 2px rgba(16,32,44,.12), 0 12px 30px rgba(19,34,45,.28);
+  box-shadow:0 1px 2px rgba(16,18,22,.12), 0 12px 30px rgba(16,18,22,.28);
   flex:0 0 auto;
 }
 .brand{display:flex; align-items:center; gap:10px; flex:0 0 auto; color:#fff}
@@ -54,13 +54,13 @@ input,select{font-family:inherit}
 .tbtn:hover{background:rgba(255,255,255,.22)}
 .tbtn:active{transform:scale(.92)}
 .tbtn.play{width:46px;height:46px;background:var(--accent);color:#fff;border-radius:13px;
-  box-shadow:0 6px 16px rgba(0,123,187,.5)}
-.tbtn.play:hover{background:#0A8AD0}
+  box-shadow:0 6px 16px rgba(255,92,43,.5)}
+.tbtn.play:hover{background:#FF7A4D}
 .tbtn svg{width:18px;height:18px}
 .tbtn.play svg{width:20px;height:20px}
 
 .tc{margin-left:4px; font-size:15px; color:#F4F8FB; min-width:118px}
-.tc b{color:#5FBDEC}
+.tc b{color:var(--accent)}
 .tc span{color:rgba(244,248,251,.5)}
 
 .toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(244,248,251,.72);margin-left:auto;
@@ -95,7 +95,7 @@ input,select{font-family:inherit}
   background:
     radial-gradient(circle at 1px 1px, #e7eaf1 1px, transparent 0) 0 0/22px 22px;}
 .stage{position:absolute; left:50%; top:50%; width:800px; height:450px; background:var(--stage); border-radius:12px;
-  box-shadow:0 4px 30px rgba(28,34,46,.10); transform-origin:center center; overflow:hidden}
+  box-shadow:0 4px 30px rgba(16,18,22,.10); transform-origin:center center; overflow:hidden}
 .obj{position:absolute; will-change:transform; touch-action:none; user-select:none}
 .obj .body{width:100%;height:100%}
 .obj.sel::after{content:"";position:absolute;inset:-7px;border:2px dashed var(--accent);border-radius:8px;
@@ -145,7 +145,7 @@ input,select{font-family:inherit}
 .pbtn:active{transform:scale(.95)}
 .kbtn:active{transform:scale(.96)}
 .kbtn.add{background:var(--key-soft);color:var(--key)}
-.kbtn.add:hover{background:#e3e0fa}
+.kbtn.add:hover{background:#FFEDE6}
 .kbtn.del{background:var(--line2);color:var(--muted)}
 .kbtn.del:hover{background:#f3d8d3;color:var(--accent-press)}
 .kbtn.danger{background:#fdece7;color:var(--accent-press)}
@@ -183,13 +183,13 @@ input,select{font-family:inherit}
 .tick.sub{border-color:var(--line2)}
 .lane{height:42px; position:relative; border-bottom:1px solid var(--line2)}
 .lane.sel{background:linear-gradient(var(--accent-soft),var(--accent-soft));background-blend-mode:multiply;
-  background-color:rgba(0,123,187,.06)}
+  background-color:rgba(255,92,43,.06)}
 .kf{position:absolute; top:50%; width:15px; height:15px; background:var(--key); 
   border:2px solid #fff; box-shadow:0 1px 5px rgba(66,101,121,.45);
   transform:translate(-50%,-50%) rotate(45deg); border-radius:3px; cursor:grab; z-index:3;
   transition:transform .08s}
 .kf:hover{background:var(--key-press)}
-.kf.sel{box-shadow:0 0 0 3px rgba(0,123,187,.28),0 2px 8px rgba(0,123,187,.55)}
+.kf.sel{box-shadow:0 0 0 3px rgba(255,92,43,.28),0 2px 8px rgba(255,92,43,.55)}
 .kf.pop{animation:pop .32s cubic-bezier(.34,1.56,.64,1)}
 @keyframes pop{0%{transform:translate(-50%,-50%) rotate(45deg) scale(.2)}
   60%{transform:translate(-50%,-50%) rotate(45deg) scale(1.35)}
@@ -200,17 +200,17 @@ input,select{font-family:inherit}
 .playhead{position:absolute; top:0; bottom:0; width:2px; background:var(--accent); z-index:8; pointer-events:none}
 .playhead .head{position:absolute; top:-1px; left:50%; transform:translateX(-50%);
   width:16px;height:16px;background:var(--accent);border-radius:5px;cursor:grab;pointer-events:auto;
-  box-shadow:0 2px 7px rgba(0,123,187,.6)}
+  box-shadow:0 2px 7px rgba(255,92,43,.6)}
 .playhead .head::after{content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);
   border:5px solid transparent;border-top-color:var(--accent)}
 
 /* keyframe color-coded by easing */
-.kf.kf-smooth{background:#007BBB}
-.kf.kf-linear{background:#5E7C8C}
-.kf.kf-bounce{background:#E0883C}
-.tween.tw-smooth{background:#007BBB}
-.tween.tw-linear{background:#5E7C8C}
-.tween.tw-bounce{background:#E0883C}
+.kf.kf-smooth{background:var(--accent)}
+.kf.kf-linear{background:#9AA1A9}
+.kf.kf-bounce{background:#B23A10}
+.tween.tw-smooth{background:var(--accent)}
+.tween.tw-linear{background:#9AA1A9}
+.tween.tw-bounce{background:#B23A10}
 .kf.sel{transform:translate(-50%,-50%) rotate(45deg) scale(1.28)}
 .playhead{width:2.5px}
 .playhead .head{width:18px;height:18px}
@@ -218,7 +218,7 @@ input,select{font-family:inherit}
 /* "editing at" indicator */
 .edit-at{font-size:11.5px;color:var(--accent);font-weight:700;margin:-9px 0 -2px;display:flex;align-items:center;gap:6px}
 .edit-at .pulse{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:phpulse 1.7s infinite}
-@keyframes phpulse{0%{box-shadow:0 0 0 0 rgba(0,123,187,.45)}70%{box-shadow:0 0 0 7px rgba(0,123,187,0)}100%{box-shadow:0 0 0 0 rgba(0,123,187,0)}}
+@keyframes phpulse{0%{box-shadow:0 0 0 0 rgba(255,92,43,.45)}70%{box-shadow:0 0 0 7px rgba(255,92,43,0)}100%{box-shadow:0 0 0 0 rgba(255,92,43,0)}}
 
 /* empty-state prompt (no objects yet) */
 #stagePrompt{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
@@ -250,7 +250,7 @@ body.is-empty #stagePrompt{display:flex}
 /* ---------- FAB / bottom sheet / backdrop (mobile) ---------- */
 #editFab{display:none; position:absolute; right:12px; bottom:12px; align-items:center; gap:6px;
   background:var(--accent); color:#fff; padding:12px 18px; border-radius:14px; font-weight:700; font-size:14px;
-  box-shadow:0 6px 18px rgba(0,123,187,.5); z-index:20}
+  box-shadow:0 6px 18px rgba(255,92,43,.5); z-index:20}
 #editFab:active{transform:scale(.95)}
 .sheet-head{display:none}
 #sheetBackdrop{position:fixed; inset:0; background:rgba(20,24,30,.45); z-index:55; opacity:0; visibility:hidden;
@@ -321,7 +321,7 @@ body.is-empty #stagePrompt{display:flex}
 @media (max-width:560px){
   .topbar .ghost{font-size:0; padding:9px}      /* icon-feel: hide text, keep tap target */
   .topbar .ghost::after{font-size:13px; font-weight:700}
-  #saveBtn::after{content:"💾"} #loadBtn::after{content:"📂"} #exportBtn::after{content:"⬇"}
+  #saveBtn::after{content:"💾"} #loadBtn::after{content:"📂"} #exportBtn::after{content:"⬇"} #helpBtn::after{content:"?"}
 }
 
 /* very small phones: shrink transport so nothing clips */
@@ -345,6 +345,35 @@ body.is-empty #stagePrompt{display:flex}
   .timeline{height:128px; flex-basis:128px}
   .tl-head{padding:6px 12px}
 }
+
+/* ---------- help sheet ---------- */
+#helpBackdrop{position:fixed; inset:0; background:rgba(16,18,22,.5); z-index:120;
+  opacity:0; visibility:hidden; transition:opacity .25s, visibility .25s}
+#helpBackdrop.show{opacity:1; visibility:visible}
+#helpSheet{position:fixed; left:50%; bottom:0; transform:translate(-50%,110%);
+  width:min(560px,100%); max-height:84dvh; background:var(--panel);
+  border-radius:20px 20px 0 0; box-shadow:0 -14px 44px rgba(16,18,22,.30);
+  z-index:130; display:flex; flex-direction:column;
+  transition:transform .32s cubic-bezier(.32,1.1,.5,1)}
+#helpSheet.open{transform:translate(-50%,0)}
+.hs-head{display:flex; align-items:center; justify-content:space-between; position:relative;
+  padding:15px 18px 11px; border-bottom:1px solid var(--line2); flex:0 0 auto}
+.hs-head .hs-grab{position:absolute; left:50%; top:6px; transform:translateX(-50%);
+  width:44px; height:5px; border-radius:3px; background:var(--line)}
+.hs-head .hs-title{font-weight:800; font-size:16px}
+.hs-head button{background:var(--line2); padding:7px 14px; border-radius:10px; font-size:13px;
+  font-weight:700; color:var(--muted)}
+.hs-head button:hover{background:#e4e6ea}
+.hs-body{overflow-y:auto; padding:16px 18px 26px; display:flex; flex-direction:column; gap:20px}
+.hs-sec h4{margin:0 0 10px; font-size:12px; font-weight:800; color:var(--accent); letter-spacing:.04em; text-transform:uppercase}
+.hs-step{display:flex; gap:12px; align-items:flex-start; margin-bottom:10px}
+.hs-step .n{flex:0 0 auto; width:24px; height:24px; border-radius:8px; background:var(--ink); color:#fff;
+  display:grid; place-items:center; font-size:12px; font-weight:800}
+.hs-step .t{font-size:13.5px; line-height:1.6; color:var(--ink)}
+.hs-step .t b{font-weight:800}
+.hs-term{margin:0 0 10px; font-size:13px; line-height:1.65; color:var(--muted)}
+.hs-term:last-child{margin-bottom:0}
+.hs-term b{color:var(--ink); font-weight:700}
 
 /* ---------- export chooser ---------- */
 .xm{position:fixed; inset:0; z-index:210; background:rgba(20,24,30,.55); backdrop-filter:blur(4px);
@@ -423,8 +452,8 @@ body.is-empty #stagePrompt{display:flex}
   <div class="topbar">
     <div class="brand">
       <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <rect x="9.4" y="1.5" width="5.2" height="2.7" rx="1.1" fill="#8FD6F7"/>
-        <circle cx="12" cy="14" r="8" stroke="#8FD6F7" stroke-width="2.2"/>
+        <rect x="9.4" y="1.5" width="5.2" height="2.7" rx="1.1" fill="#FF5C2B"/>
+        <circle cx="12" cy="14" r="8" stroke="#FF5C2B" stroke-width="2.2"/>
         <path d="M12 14 V8.6" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
         <path d="M12 14 L15.6 16.1" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round"/>
         <circle cx="12" cy="14" r="1.4" fill="#FFFFFF"/>
@@ -454,6 +483,7 @@ body.is-empty #stagePrompt{display:flex}
     <button class="ghost" id="saveBtn">保存</button>
     <button class="ghost" id="loadBtn">ひらく</button>
     <button class="ghost" id="exportBtn">書き出し</button>
+    <button class="ghost" id="helpBtn" title="使い方" aria-label="使い方">?</button>
     <input type="file" id="fileIn" accept=".json,application/json" hidden>
     <input type="file" id="imgIn" accept="image/*" hidden>
     <input type="file" id="morphFile" accept="image/*" hidden>
@@ -492,12 +522,6 @@ body.is-empty #stagePrompt{display:flex}
           <span class="sp-main">タップして画像を読み込む</span>
           <span class="sp-sub">写真・イラスト・PNG透過もOK／下のツールで図形やテキストも置けます</span>
         </button>
-        <div class="hint" id="hint">
-          <div class="step"><span class="num">1</span> <span><b>かたち</b>を1つ置く</span></div>
-          <div class="step"><span class="num">2</span> <span>下の<b>時間バー</b>を動かす</span></div>
-          <div class="step"><span class="num">3</span> <span>かたちを<b>動かす</b>→キーフレームが自動でつく</span></div>
-          <span class="x" id="hintX">×</span>
-        </div>
         <button id="editFab">✎ 編集</button>
       </div>
     </div>
@@ -595,6 +619,31 @@ body.is-empty #stagePrompt{display:flex}
   </div>
 </div>
 
+<div id="helpBackdrop"></div>
+<div id="helpSheet" role="dialog" aria-label="使い方">
+  <div class="hs-head"><span class="hs-grab"></span><span class="hs-title">使い方</span><button id="helpClose">とじる</button></div>
+  <div class="hs-body">
+    <div class="hs-sec">
+      <h4>3ステップ</h4>
+      <div class="hs-step"><span class="n">1</span><span class="t"><b>素材を置く</b>。画像を読み込むか、左（スマホは下）のツールから文字・図形を配置する。</span></div>
+      <div class="hs-step"><span class="n">2</span><span class="t"><b>再生位置を移動</b>。下のタイムラインの目盛りをドラッグして、編集したい時間を選ぶ。</span></div>
+      <div class="hs-step"><span class="n">3</span><span class="t"><b>動かす</b>。その時間で素材を動かす・回す・大きさを変えると、キーフレームが自動で記録される。▶ で再生して確認。</span></div>
+    </div>
+    <div class="hs-sec">
+      <h4>用語</h4>
+      <p class="hs-term"><b>キーフレーム（◇）</b>：その時刻の「ポーズ」。2つ以上あると、間を自動で補間して動く。ドラッグで時刻を移動、選んで Delete で削除。</p>
+      <p class="hs-term"><b>自動記録</b>：ON の間は動かすたびにキーフレームが付く。OFF にすると既存のキーだけを編集できる。</p>
+      <p class="hs-term"><b>動き方（イージング）</b>：キーフレーム間の動きのクセ。なめらか／等速／弾む から選べる。</p>
+      <p class="hs-term"><b>オニオン</b>：前後のポーズを薄い残像で表示。動きの差を見ながら調整できる。</p>
+      <p class="hs-term"><b>長さ</b>：作品全体の尺（最大10秒）。3s／5s／10s から選ぶ。</p>
+    </div>
+    <div class="hs-sec">
+      <h4>書き出し</h4>
+      <p class="hs-term">「書き出し」から <b>GIF</b>（手軽・1bit透明）か <b>PNG連番(zip)</b>（高画質・完全透明）を選べる。背景は透明で出力されるので、動画編集アプリで重ねられる。HTML単体での書き出しも可能。</p>
+    </div>
+  </div>
+</div>
+
 <div id="sheetBackdrop"></div>
 <div class="toast" id="toast"></div>
 
@@ -605,7 +654,7 @@ body.is-empty #stagePrompt{display:flex}
    ========================================================= */
 
 const STAGE_W = 800, STAGE_H = 450;
-const COLORS = ["#007BBB","#426579","#2BA6A4","#3D7BFF","#F2A900","#E8617B","#15242E","#9AA3B2"];
+const COLORS = ["#FF5C2B","#426579","#2BA6A4","#3D7BFF","#F2A900","#E8617B","#15242E","#9AA3B2"];
 const ICONS = {rect:"⬛",circle:"⬤",triangle:"🔺",star:"⭐",text:"🆃",image:"🖼️",morph:"🔀"};
 const TYPE_NAMES = {rect:"四角",circle:"丸",triangle:"三角",star:"星",text:"テキスト",emoji:"スタンプ",image:"画像",morph:"中割り"};
 const FONTS = {
@@ -1285,8 +1334,14 @@ document.getElementById("recSwitch").addEventListener("click",e=>{
   toast(autoRecord?"自動記録ON：動かすとキーが付くよ":"自動記録OFF：手動でキーを追加してね");
 });
 
-/* hint dismiss */
-document.getElementById("hintX").addEventListener("click",()=>document.getElementById("hint").style.display="none");
+/* help sheet（常時ヒントの代わりに、押したら出るヘルプ）*/
+const helpSheet=document.getElementById("helpSheet");
+const helpBackdrop=document.getElementById("helpBackdrop");
+function openHelp(){ helpSheet.classList.add("open"); helpBackdrop.classList.add("show"); }
+function closeHelp(){ helpSheet.classList.remove("open"); helpBackdrop.classList.remove("show"); }
+document.getElementById("helpBtn").addEventListener("click",openHelp);
+document.getElementById("helpClose").addEventListener("click",closeHelp);
+helpBackdrop.addEventListener("click",closeHelp);
 
 /* ---------- mobile bottom sheet ---------- */
 const inspectorEl=document.getElementById("inspector");
@@ -1351,12 +1406,12 @@ function buildStandalone(){
   return `<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>10sec</title>
-<style>html,body{margin:0;height:100%;background:#E7ECF1;display:grid;place-items:center;font-family:system-ui}
+<style>html,body{margin:0;height:100%;background:#E9EAED;display:grid;place-items:center;font-family:system-ui}
 #fit{width:min(92vw,900px);aspect-ratio:16/9;position:relative}
-#st{position:absolute;inset:0;background:#F4F8FA;border-radius:12px;box-shadow:0 10px 44px rgba(16,32,44,.16);overflow:hidden}
+#st{position:absolute;inset:0;background:#F6F7F8;border-radius:12px;box-shadow:0 10px 44px rgba(16,18,22,.16);overflow:hidden}
 .o{position:absolute}.o>div{width:100%;height:100%}
-button{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);border:none;background:#007BBB;color:#fff;
-padding:12px 22px;border-radius:12px;font:600 15px system-ui;cursor:pointer;box-shadow:0 6px 16px rgba(0,123,187,.45)}</style>
+button{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);border:none;background:#FF5C2B;color:#fff;
+padding:12px 22px;border-radius:12px;font:600 15px system-ui;cursor:pointer;box-shadow:0 6px 16px rgba(255,92,43,.45)}</style>
 </head><body><div id="fit"><div id="st"></div></div><button onclick="play()">▶ もう一回</button>
 <script>
 const P=${data};const SW=800,SH=450;
@@ -1735,7 +1790,7 @@ function renderOnion(){
   const times=obj.keys.map(k=>k.t).sort((a,b)=>a-b);
   const prev=times.filter(t=>t < currentTime-1).pop();
   const next=times.find(t=>t > currentTime+1);
-  [["#E0883C",prev],["#007BBB",next]].forEach(([col,t])=>{
+  [["#FF5C2B",prev],["#8A9099",next]].forEach(([col,t])=>{
     if(t==null) return;
     const pose=poseAt(obj,t);
     const g=document.createElement("div");
