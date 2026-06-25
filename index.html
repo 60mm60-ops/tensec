@@ -6,28 +6,61 @@
 <title>10sec — 10-Second Animation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&family=DM+Mono:wght@400;500&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root{
-  --bg:#E9EAED; --panel:#FFFFFF; --ink:#191C20; --muted:#6A7077;
-  --line:#DCDEE3; --line2:#ECEDF0;
-  --accent:#FF5C2B; --accent-press:#E8431A; --accent-soft:#FFE7DF;
-  --key:#3A3F46; --key-press:#2A2E34; --key-soft:#ECEDF0;
-  --stage:#F6F7F8;
-  --topA:#17191D; --topB:#262A30;
-  --r:10px; --r-sm:8px;
-  --shadow:0 1px 2px rgba(16,18,22,.10), 0 6px 18px rgba(16,18,22,.10);
+  /* warm charcoal studio shell */
+  --bg:#131316;
+  --panel:#1B1C21;
+  --panel-2:#222329;
+  --elevate:#2A2B33;
+  --stage:#EFEDE7;                 /* warm lightbox paper */
+
+  --ink:#ECEAE5;
+  --ink-2:#C6C4BF;
+  --muted:#8B8A93;
+  --faint:#5E5E68;
+
+  --line:#2D2E36;
+  --line2:#25262C;
+  --hair:rgba(255,255,255,.055);   /* top-edge highlight */
+
+  /* refined copper accent (one accent, used with restraint) */
+  --accent:#E2674C;
+  --accent-press:#C8543C;
+  --accent-bright:#EE7C62;
+  --accent-soft:rgba(226,103,76,.13);
+  --accent-soft2:rgba(226,103,76,.22);
+  --accent-line:rgba(226,103,76,.42);
+  --accent-glow:rgba(226,103,76,.36);
+
+  /* rare brass — bounce easing accent */
+  --gold:#CBA869;
+
+  /* keyframe metal */
+  --key:#9AA0AB;
+  --key-press:#B7BCC5;
+  --key-soft:#2A2B33;
+
+  --topA:#202126; --topB:#0F0F12;
+
+  --serif:"Fraunces", Georgia, "Times New Roman", serif;
+
+  --r:12px; --r-sm:9px;
+  --shadow:0 0 0 1px var(--line), 0 1px 0 var(--hair) inset,
+           0 16px 38px rgba(0,0,0,.36), 0 3px 10px rgba(0,0,0,.28);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
+html{background:var(--bg)}
 body{
   margin:0; background:var(--bg); color:var(--ink);
   font-family:"Inter","Noto Sans JP",system-ui,sans-serif;
   -webkit-font-smoothing:antialiased; overflow:hidden;
 }
-.mono{font-family:"DM Mono",ui-monospace,monospace}
+.mono{font-family:"DM Mono",ui-monospace,monospace; font-feature-settings:"tnum" 1}
 button{font-family:inherit; cursor:pointer; border:none; background:none; color:inherit}
 input,select{font-family:inherit}
 
@@ -36,236 +69,259 @@ input,select{font-family:inherit}
 
 .topbar{
   display:flex; align-items:center; gap:14px;
-  background:linear-gradient(120deg,var(--topA),var(--topB)); color:#F4F8FB;
-  border-radius:var(--r); padding:10px 16px;
-  box-shadow:0 1px 2px rgba(16,18,22,.12), 0 12px 30px rgba(16,18,22,.28);
+  background:linear-gradient(165deg,var(--topA),var(--topB)); color:var(--ink);
+  border-radius:var(--r); padding:11px 16px;
+  box-shadow:0 0 0 1px var(--line), 0 1px 0 var(--hair) inset,
+             0 18px 44px rgba(0,0,0,.46), 0 4px 12px rgba(0,0,0,.34);
   flex:0 0 auto;
 }
-.brand{display:flex; align-items:center; gap:10px; flex:0 0 auto; color:#fff}
-.brand .mark{width:19px;height:19px; flex:0 0 auto; display:block}
-.brand-tx{display:flex; flex-direction:column; justify-content:center; line-height:1.08; white-space:nowrap}
-.brand-tx .bt-title{font-weight:700; font-size:17px; letter-spacing:0; color:#fff}
-.brand-tx .bt-sub{font-weight:600; font-size:9px; letter-spacing:.2em; text-transform:uppercase;
-  color:rgba(244,248,251,.5); margin-top:2px}
+.brand{display:flex; align-items:center; gap:11px; flex:0 0 auto}
+.brand .mark{width:21px;height:21px; flex:0 0 auto; display:block}
+.brand-tx{display:flex; flex-direction:column; justify-content:center; line-height:1; white-space:nowrap}
+.brand-tx .bt-title{font-family:var(--serif); font-weight:500; font-size:21px; letter-spacing:.01em; color:var(--ink)}
+.brand-tx .bt-sub{font-weight:500; font-size:8.5px; letter-spacing:.34em; text-transform:uppercase;
+  color:var(--faint); margin-top:4px}
 
-.transport{display:flex; align-items:center; gap:8px; margin-left:6px}
-.tbtn{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.12);color:#F4F8FB;
-  display:grid;place-items:center; transition:transform .12s, background .12s;}
-.tbtn:hover{background:rgba(255,255,255,.22)}
+.transport{display:flex; align-items:center; gap:8px; margin-left:8px}
+.tbtn{width:38px;height:38px;border-radius:11px;background:var(--panel-2);color:var(--ink-2);
+  box-shadow:0 0 0 1px var(--line), 0 1px 0 var(--hair) inset;
+  display:grid;place-items:center; transition:transform .12s, background .14s, color .14s;}
+.tbtn:hover{background:var(--elevate); color:var(--ink)}
 .tbtn:active{transform:scale(.92)}
-.tbtn.play{width:46px;height:46px;background:var(--accent);color:#fff;border-radius:13px;
-  box-shadow:0 6px 16px rgba(255,92,43,.5)}
-.tbtn.play:hover{background:#FF7A4D}
+.tbtn.play{width:46px;height:46px;border-radius:13px;color:#fff;
+  background:linear-gradient(180deg,var(--accent-bright),var(--accent));
+  box-shadow:0 0 0 1px rgba(0,0,0,.25), 0 1px 0 rgba(255,255,255,.28) inset,
+             0 8px 20px var(--accent-glow)}
+.tbtn.play:hover{background:linear-gradient(180deg,#F38B72,var(--accent-bright))}
 .tbtn svg{width:18px;height:18px}
 .tbtn.play svg{width:20px;height:20px}
 
-.tc{margin-left:4px; font-size:15px; color:#F4F8FB; min-width:118px}
-.tc b{color:var(--accent)}
-.tc span{color:rgba(244,248,251,.5)}
+.tc{margin-left:6px; font-size:15px; color:var(--ink-2); min-width:118px; letter-spacing:.02em}
+.tc b{color:var(--accent); font-weight:500}
+.tc span{color:var(--faint)}
 
-.toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(244,248,251,.72);margin-left:auto;
+.toggle{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--muted);margin-left:auto;
   user-select:none}
-.switch{width:42px;height:24px;border-radius:99px;background:rgba(255,255,255,.22);position:relative;transition:background .15s}
+.switch{width:42px;height:24px;border-radius:99px;background:rgba(255,255,255,.10);position:relative;
+  box-shadow:0 0 0 1px var(--line) inset; transition:background .16s}
 .switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;
-  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .15s}
+  background:#E9E7E2;box-shadow:0 1px 3px rgba(0,0,0,.45);transition:transform .16s}
 .switch.on{background:var(--accent)}
-.switch.on::after{transform:translateX(18px)}
+.switch.on::after{transform:translateX(18px); background:#fff}
 .rec-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.3)}
-.switch.on ~ .rec-dot, .toggle .switch.on + .rec-dot{}
-.topbar .ghost{font-size:13px;color:#F4F8FB;padding:9px 13px;border-radius:10px;background:rgba(255,255,255,.12)}
-.topbar .ghost:hover{background:rgba(255,255,255,.22);color:#fff}
+.topbar .ghost{font-size:13px;color:var(--ink-2);padding:9px 13px;border-radius:10px;background:var(--panel-2);
+  box-shadow:0 0 0 1px var(--line), 0 1px 0 var(--hair) inset; transition:background .14s,color .14s}
+.topbar .ghost:hover{background:var(--elevate);color:var(--ink)}
 
 /* ---------- main ---------- */
 .main{flex:1 1 auto; display:flex; gap:12px; min-height:0}
 .tools{flex:0 0 64px; background:var(--panel); border-radius:var(--r); box-shadow:var(--shadow);
   padding:12px 0; display:flex; flex-direction:column; align-items:center; gap:8px; overflow-y:auto}
-.tools .lbl{font-size:10px;color:var(--muted);font-weight:700;margin:4px 0}
-.tool{width:44px;height:44px;border-radius:12px;background:var(--line2);display:grid;place-items:center;
-  font-size:20px;transition:transform .12s, background .12s; color:var(--ink)}
-.tool:hover{background:var(--accent-soft);transform:translateY(-1px)}
+.tools .lbl{font-size:9px;color:var(--faint);font-weight:600;margin:5px 0 1px;letter-spacing:.18em;text-transform:uppercase}
+.tool{width:44px;height:44px;border-radius:12px;background:var(--panel-2);display:grid;place-items:center;
+  font-size:20px;color:var(--ink-2);
+  box-shadow:0 0 0 1px var(--line), 0 1px 0 var(--hair) inset;
+  transition:transform .12s, background .14s, box-shadow .14s, color .14s}
+.tool:hover{background:var(--elevate);color:var(--ink);transform:translateY(-1px);
+  box-shadow:0 0 0 1px var(--accent-line), 0 1px 0 var(--hair) inset, 0 6px 16px rgba(0,0,0,.32)}
 .tool:active{transform:scale(.9)}
-.tool.primary{background:var(--accent-soft); color:var(--accent-press); box-shadow:inset 0 0 0 1.5px var(--accent)}
-.tool.primary:hover{background:#d3e8f6}
+.tool.primary{background:var(--accent-soft); color:var(--accent-bright);
+  box-shadow:0 0 0 1px var(--accent-line), 0 1px 0 var(--hair) inset}
+.tool.primary:hover{background:var(--accent-soft2); color:var(--accent-bright)}
 .tool.shape svg{width:22px;height:22px}
 
 .stagewrap{flex:1 1 auto; background:var(--panel); border-radius:var(--r); box-shadow:var(--shadow);
   display:flex; flex-direction:column; min-width:0; overflow:hidden; position:relative}
 .lbl-mini{display:none}
-.stage-fit{flex:1; position:relative; overflow:hidden; padding:18px;
+.stage-fit{flex:1; position:relative; overflow:hidden; padding:18px; touch-action:none;
   background:
-    radial-gradient(circle at 1px 1px, #e7eaf1 1px, transparent 0) 0 0/22px 22px;}
-.stage{position:absolute; left:50%; top:50%; width:800px; height:450px; background:var(--stage); border-radius:12px;
-  box-shadow:0 4px 30px rgba(16,18,22,.10); transform-origin:center center; overflow:hidden}
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,.045) 1px, transparent 0) 0 0/24px 24px;}
+.stage{position:absolute; left:50%; top:50%; width:800px; height:450px; background:var(--stage); border-radius:10px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.35), 0 30px 70px rgba(0,0,0,.5), 0 8px 22px rgba(0,0,0,.35);
+  transform-origin:center center; overflow:hidden}
 .obj{position:absolute; will-change:transform; touch-action:none; user-select:none}
 .obj .body{width:100%;height:100%}
-.obj.sel::after{content:"";position:absolute;inset:-7px;border:2px dashed var(--accent);border-radius:8px;
+.obj.sel::after{content:"";position:absolute;inset:-7px;border:1.5px dashed var(--accent);border-radius:7px;
   pointer-events:none}
-.obj .handle{position:absolute;inset:-7px;cursor:grab}
+.obj .handle{position:absolute;inset:-7px;cursor:grab;touch-action:none}
 .obj.dragging .handle{cursor:grabbing}
-
-.hint{position:absolute; left:18px; bottom:14px; right:18px; display:flex; gap:14px; flex-wrap:wrap;
-  align-items:center; background:rgba(255,255,255,.92); backdrop-filter:blur(6px);
-  border:1px solid var(--line); border-radius:12px; padding:10px 14px; font-size:12.5px; color:var(--muted);
-  box-shadow:var(--shadow)}
-.hint b{color:var(--ink)} .hint .step{display:flex;align-items:center;gap:7px}
-.hint .num{width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;display:grid;
-  place-items:center;font-size:11px;font-weight:700;flex:0 0 auto}
-.hint .x{margin-left:auto;cursor:pointer;color:var(--muted);font-weight:700;padding:2px 6px;border-radius:6px}
-.hint .x:hover{background:var(--line2)}
+body.dragging-obj .app{overflow:hidden !important; touch-action:none}
 
 /* ---------- inspector ---------- */
 .inspector{flex:0 0 248px; background:var(--panel); border-radius:var(--r); box-shadow:var(--shadow);
   padding:16px; overflow-y:auto; display:flex; flex-direction:column; gap:16px}
-.insp-empty{color:var(--muted); font-size:13px; line-height:1.7; text-align:center; margin-top:30px}
-.insp-empty .big{font-size:30px; margin-bottom:8px}
-.field{display:flex; flex-direction:column; gap:7px}
-.field > label{font-size:12px; font-weight:700; color:var(--muted); display:flex; justify-content:space-between}
-.field > label .v{font-weight:500; color:var(--ink)}
-.field input[type=range]{-webkit-appearance:none; height:6px; border-radius:99px; background:var(--line);
-  outline:none}
-.field input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:18px;height:18px;border-radius:50%;
-  background:#fff;border:2px solid var(--accent);box-shadow:0 1px 4px rgba(0,0,0,.18);cursor:pointer}
-.field input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;
-  border:2px solid var(--accent);cursor:pointer}
+.insp-empty{color:var(--muted); font-size:13px; line-height:1.8; text-align:center; margin-top:34px}
+.insp-empty .big{font-size:30px; margin-bottom:10px; opacity:.7}
+.field{display:flex; flex-direction:column; gap:8px}
+.field > label{font-size:11px; font-weight:600; color:var(--muted); letter-spacing:.04em;
+  display:flex; justify-content:space-between; text-transform:uppercase}
+.field > label .v{font-weight:500; color:var(--ink); text-transform:none; letter-spacing:0;
+  font-family:"DM Mono",monospace; font-size:11.5px}
+.field input[type=range]{-webkit-appearance:none; appearance:none; height:5px; border-radius:99px;
+  background:var(--key-soft); box-shadow:0 0 0 1px var(--line) inset; outline:none}
+.field input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:16px;height:16px;border-radius:50%;
+  background:var(--accent);box-shadow:0 0 0 2px var(--panel),0 2px 6px rgba(0,0,0,.5);cursor:pointer;
+  transition:transform .1s}
+.field input[type=range]::-webkit-slider-thumb:active{transform:scale(1.15)}
+.field input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);
+  border:2px solid var(--panel);cursor:pointer}
 .row{display:flex; gap:8px; align-items:center}
-.txtin, .selin{width:100%; border:1.5px solid var(--line); border-radius:10px; padding:9px 11px; font-size:13px;
-  color:var(--ink); background:#fff}
-.txtin:focus,.selin:focus{outline:none;border-color:var(--accent)}
+.txtin, .selin{width:100%; border:none; box-shadow:0 0 0 1px var(--line) inset; border-radius:9px;
+  padding:9px 11px; font-size:13px; color:var(--ink); background:var(--panel-2)}
+.txtin:focus,.selin:focus{outline:none;box-shadow:0 0 0 1.5px var(--accent) inset}
+.selin{appearance:none; -webkit-appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 16px) 50%, calc(100% - 11px) 50%;
+  background-size:5px 5px, 5px 5px; background-repeat:no-repeat; padding-right:30px}
+.selin option{background:var(--panel-2); color:var(--ink)}
 .swatches{display:flex; gap:7px; flex-wrap:wrap}
-.sw{width:26px;height:26px;border-radius:8px;cursor:pointer;border:2px solid #fff;
-  box-shadow:0 0 0 1px var(--line)}
-.sw.on{box-shadow:0 0 0 2px var(--ink)}
-.insp-name{font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px}
-.insp-name .ic{font-size:18px}
-.kbtn{border-radius:10px;padding:10px;font-size:12.5px;font-weight:700;text-align:center;transition:transform .1s}
+.sw{width:26px;height:26px;border-radius:7px;cursor:pointer;
+  box-shadow:0 0 0 1px rgba(0,0,0,.4), 0 0 0 2px var(--panel)}
+.sw.on{box-shadow:0 0 0 1px rgba(0,0,0,.4), 0 0 0 2px var(--ink)}
+.insp-name{font-family:var(--serif);font-weight:500;font-size:16px;display:flex;align-items:center;gap:9px}
+.insp-name .ic{font-size:17px}
+.kbtn{border-radius:9px;padding:10px;font-size:12.5px;font-weight:600;text-align:center;transition:transform .1s, background .14s, color .14s}
 .presets{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.pbtn{border-radius:10px;padding:10px 8px;font-size:12.5px;font-weight:700;background:var(--accent-soft);
-  color:var(--accent-press);transition:transform .1s, background .12s}
-.pbtn:hover{background:#d3e8f6}
+.pbtn{border-radius:9px;padding:10px 8px;font-size:12.5px;font-weight:600;background:var(--accent-soft);
+  color:var(--accent-bright);box-shadow:0 0 0 1px var(--accent-line) inset;transition:transform .1s, background .14s}
+.pbtn:hover{background:var(--accent-soft2)}
 .pbtn:active{transform:scale(.95)}
 .kbtn:active{transform:scale(.96)}
-.kbtn.add{background:var(--key-soft);color:var(--key)}
-.kbtn.add:hover{background:#FFEDE6}
-.kbtn.del{background:var(--line2);color:var(--muted)}
-.kbtn.del:hover{background:#f3d8d3;color:var(--accent-press)}
-.kbtn.danger{background:#fdece7;color:var(--accent-press)}
+.kbtn.add{background:var(--panel-2);color:var(--ink-2);box-shadow:0 0 0 1px var(--line) inset}
+.kbtn.add:hover{background:var(--elevate);color:var(--ink)}
+.kbtn.del{background:var(--panel-2);color:var(--muted);box-shadow:0 0 0 1px var(--line) inset}
+.kbtn.del:hover{background:var(--accent-soft);color:var(--accent-bright);box-shadow:0 0 0 1px var(--accent-line) inset}
+.kbtn.danger{background:transparent;color:var(--accent);box-shadow:0 0 0 1px var(--accent-line) inset}
+.kbtn.danger:hover{background:var(--accent-soft)}
 .divider{height:1px;background:var(--line2);margin:-2px 0}
 
 /* ---------- timeline ---------- */
 .timeline{flex:0 0 auto; height:200px; background:var(--panel); border-radius:var(--r); box-shadow:var(--shadow);
   display:flex; flex-direction:column; overflow:hidden}
 .tl-head{display:flex; align-items:center; gap:12px; padding:10px 14px; border-bottom:1px solid var(--line2)}
-.tl-head h3{margin:0;font-size:14px;font-weight:800}
+.tl-head h3{margin:0;font-family:var(--serif);font-size:15px;font-weight:500;letter-spacing:.01em}
 .tl-head .sub{font-size:12px;color:var(--muted)}
-.dur{display:flex;gap:6px;align-items:center;margin-left:auto;font-size:12px;color:var(--muted)}
-.dur button{padding:5px 10px;border-radius:8px;background:var(--line2);font-size:12px;font-weight:700;color:var(--muted)}
-.dur button.on{background:var(--accent);color:#fff}
-.dur button:hover:not(.on){background:#e4e7ee}
+.dur{display:flex;gap:6px;align-items:center;margin-left:auto;font-size:11px;color:var(--faint);
+  letter-spacing:.1em;text-transform:uppercase}
+.dur button{padding:5px 11px;border-radius:8px;background:var(--panel-2);font-size:12px;font-weight:600;color:var(--muted);
+  box-shadow:0 0 0 1px var(--line) inset;letter-spacing:0;text-transform:none}
+.dur button.on{background:var(--accent);color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.25) inset}
+.dur button:hover:not(.on){background:var(--elevate);color:var(--ink)}
 
 .tl-body{flex:1; display:flex; min-height:0}
-.tl-labels{flex:0 0 124px; border-right:1px solid var(--line2); overflow-y:auto; background:#fcfcfe}
+.tl-labels{flex:0 0 124px; border-right:1px solid var(--line2); overflow-y:auto; background:#17181d}
 .tl-ruler-pad{height:30px;border-bottom:1px solid var(--line2)}
 .lane-label{height:42px;display:flex;align-items:center;gap:8px;padding:0 12px;border-bottom:1px solid var(--line2);
-  font-size:13px;font-weight:500;cursor:pointer;overflow:hidden;white-space:nowrap}
+  font-size:13px;font-weight:400;color:var(--ink-2);cursor:pointer;overflow:hidden;white-space:nowrap;transition:background .12s}
 .lane-label .ic{font-size:15px;flex:0 0 auto}
 .lane-label .nm{flex:1 1 auto; min-width:0; overflow:hidden;text-overflow:ellipsis}
-.lane-label.sel{background:var(--accent-soft);color:var(--accent-press);font-weight:700}
+.lane-label:hover{background:#1d1e24}
+.lane-label.sel{background:var(--accent-soft);color:var(--accent-bright);font-weight:600}
 .lane-label .del{margin-left:auto;opacity:0;color:var(--muted);padding:2px 5px;border-radius:6px;flex:0 0 auto}
 .lane-label:hover .del{opacity:1}
-.lane-label .del:hover{background:#f3d8d3;color:var(--accent-press)}
+.lane-label .del:hover{background:var(--accent-soft);color:var(--accent-bright)}
 
 .tl-track{flex:1; position:relative; overflow-x:auto; overflow-y:auto}
 .tl-inner{position:relative; min-width:100%; height:100%}
-.ruler{height:30px; position:sticky; top:0; z-index:5; background:#fcfcfe; border-bottom:1px solid var(--line2);
+.ruler{height:30px; position:sticky; top:0; z-index:5; background:#17181d; border-bottom:1px solid var(--line2);
   cursor:pointer}
-.tick{position:absolute; top:0; height:30px; border-left:1px solid var(--line); font-size:10px; color:var(--muted);
-  padding:4px 0 0 4px; box-sizing:border-box}
+.tick{position:absolute; top:0; height:30px; border-left:1px solid var(--line); font-size:10px; color:var(--faint);
+  padding:4px 0 0 4px; box-sizing:border-box; font-family:"DM Mono",monospace}
 .tick.sub{border-color:var(--line2)}
 .lane{height:42px; position:relative; border-bottom:1px solid var(--line2)}
-.lane.sel{background:linear-gradient(var(--accent-soft),var(--accent-soft));background-blend-mode:multiply;
-  background-color:rgba(255,92,43,.06)}
-.kf{position:absolute; top:50%; width:15px; height:15px; background:var(--key); 
-  border:2px solid #fff; box-shadow:0 1px 5px rgba(66,101,121,.45);
+.lane.sel{background-color:rgba(226,103,76,.06)}
+
+.kf{position:absolute; top:50%; width:14px; height:14px; background:var(--key);
+  border:2px solid var(--panel); box-shadow:0 1px 5px rgba(0,0,0,.5);
   transform:translate(-50%,-50%) rotate(45deg); border-radius:3px; cursor:grab; z-index:3;
   transition:transform .08s}
 .kf:hover{background:var(--key-press)}
-.kf.sel{box-shadow:0 0 0 3px rgba(255,92,43,.28),0 2px 8px rgba(255,92,43,.55)}
+.kf.sel{box-shadow:0 0 0 3px var(--accent-soft2),0 2px 8px rgba(0,0,0,.6)}
 .kf.pop{animation:pop .32s cubic-bezier(.34,1.56,.64,1)}
 @keyframes pop{0%{transform:translate(-50%,-50%) rotate(45deg) scale(.2)}
   60%{transform:translate(-50%,-50%) rotate(45deg) scale(1.35)}
   100%{transform:translate(-50%,-50%) rotate(45deg) scale(1)}}
-.tween{position:absolute;top:50%;height:3px;background:linear-gradient(90deg,var(--key),var(--key));
-  opacity:.28;transform:translateY(-50%);border-radius:2px;z-index:2}
+.tween{position:absolute;top:50%;height:2px;background:var(--key);
+  opacity:.35;transform:translateY(-50%);border-radius:2px;z-index:2}
 
 .playhead{position:absolute; top:0; bottom:0; width:2px; background:var(--accent); z-index:8; pointer-events:none}
 .playhead .head{position:absolute; top:-1px; left:50%; transform:translateX(-50%);
   width:16px;height:16px;background:var(--accent);border-radius:5px;cursor:grab;pointer-events:auto;
-  box-shadow:0 2px 7px rgba(255,92,43,.6)}
+  box-shadow:0 1px 0 rgba(255,255,255,.25) inset, 0 2px 7px var(--accent-glow)}
 .playhead .head::after{content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);
   border:5px solid transparent;border-top-color:var(--accent)}
 
 /* keyframe color-coded by easing */
 .kf.kf-smooth{background:var(--accent)}
-.kf.kf-linear{background:#9AA1A9}
-.kf.kf-bounce{background:#B23A10}
+.kf.kf-linear{background:#737884}
+.kf.kf-bounce{background:var(--gold)}
 .tween.tw-smooth{background:var(--accent)}
-.tween.tw-linear{background:#9AA1A9}
-.tween.tw-bounce{background:#B23A10}
+.tween.tw-linear{background:#737884}
+.tween.tw-bounce{background:var(--gold)}
 .kf.sel{transform:translate(-50%,-50%) rotate(45deg) scale(1.28)}
 .playhead{width:2.5px}
 .playhead .head{width:18px;height:18px}
 
 /* "editing at" indicator */
-.edit-at{font-size:11.5px;color:var(--accent);font-weight:700;margin:-9px 0 -2px;display:flex;align-items:center;gap:6px}
+.edit-at{font-size:11.5px;color:var(--accent-bright);font-weight:600;margin:-9px 0 -2px;display:flex;align-items:center;gap:7px}
 .edit-at .pulse{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:phpulse 1.7s infinite}
-@keyframes phpulse{0%{box-shadow:0 0 0 0 rgba(255,92,43,.45)}70%{box-shadow:0 0 0 7px rgba(255,92,43,0)}100%{box-shadow:0 0 0 0 rgba(255,92,43,0)}}
+@keyframes phpulse{0%{box-shadow:0 0 0 0 var(--accent-glow)}70%{box-shadow:0 0 0 7px rgba(226,103,76,0)}100%{box-shadow:0 0 0 0 rgba(226,103,76,0)}}
 
 /* empty-state prompt (no objects yet) */
+/* empty-state prompt sits ON the light paper stage, so it's styled for paper */
 #stagePrompt{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  display:none; flex-direction:column; align-items:center; gap:6px; text-align:center;
-  padding:26px 30px; border-radius:18px; border:2px dashed var(--line);
-  background:rgba(255,255,255,.7); color:var(--muted); cursor:pointer; max-width:84%;
+  display:none; flex-direction:column; align-items:center; gap:8px; text-align:center;
+  padding:30px 34px; border-radius:16px; border:1.6px dashed #CBC4B5;
+  background:transparent; color:#8A857B; cursor:pointer; max-width:78%;
   transition:transform .12s, border-color .15s, background .15s; z-index:4}
-#stagePrompt:hover{border-color:var(--accent); background:#fff}
+#stagePrompt:hover{border-color:var(--accent-line); background:rgba(226,103,76,.06)}
 #stagePrompt:active{transform:translate(-50%,-50%) scale(.97)}
 body.is-empty #stagePrompt{display:flex}
-#stagePrompt .sp-ic{font-size:40px}
-#stagePrompt .sp-main{font-size:15px; font-weight:800; color:var(--ink)}
-#stagePrompt .sp-sub{font-size:11.5px; line-height:1.5; max-width:240px}
+#stagePrompt .sp-ic{font-size:40px; opacity:.95}
+#stagePrompt .sp-main{font-size:15px; font-weight:700; color:#2D2A25}
+#stagePrompt .sp-sub{font-size:11.5px; line-height:1.6; max-width:248px; color:#8A857B}
 
-/* onion skin ghosts （ボタンの class="ghost" と衝突するため .onion-ghost に改名）*/
+/* onion skin ghosts */
 .onion-ghost{position:absolute;opacity:.34;pointer-events:none}
-.onion-ghost::after{content:"";position:absolute;inset:-4px;border:1.5px dashed var(--gc,#888);border-radius:8px;opacity:.65}
+.onion-ghost::after{content:"";position:absolute;inset:-4px;border:1.5px dashed var(--gc,#888);border-radius:8px;opacity:.6}
 
 /* onion toggle */
-.onion{padding:5px 11px;border-radius:8px;background:var(--line2);font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:5px}
-.onion.on{background:var(--accent);color:#fff}
-.onion:hover:not(.on){background:#dfe5ec}
+.onion{padding:5px 11px;border-radius:8px;background:var(--panel-2);font-size:12px;font-weight:600;color:var(--muted);
+  box-shadow:0 0 0 1px var(--line) inset;display:flex;align-items:center;gap:5px;transition:background .14s,color .14s}
+.onion.on{background:var(--accent);color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.25) inset}
+.onion:hover:not(.on){background:var(--elevate);color:var(--ink)}
 
 .toast{position:fixed; bottom:18px; left:50%; transform:translateX(-50%) translateY(20px); opacity:0;
-  background:var(--ink); color:#fff; padding:11px 18px; border-radius:11px; font-size:13px; z-index:100;
-  transition:.25s; box-shadow:0 8px 24px rgba(0,0,0,.25); pointer-events:none}
+  background:var(--elevate); color:var(--ink); padding:11px 18px; border-radius:11px; font-size:13px; z-index:100;
+  box-shadow:0 0 0 1px var(--line), 0 1px 0 var(--hair) inset, 0 12px 30px rgba(0,0,0,.5);
+  transition:.25s; pointer-events:none}
 .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
 
 /* ---------- FAB / bottom sheet / backdrop (mobile) ---------- */
 #editFab{display:none; position:absolute; right:12px; bottom:12px; align-items:center; gap:6px;
-  background:var(--accent); color:#fff; padding:12px 18px; border-radius:14px; font-weight:700; font-size:14px;
-  box-shadow:0 6px 18px rgba(255,92,43,.5); z-index:20}
+  background:linear-gradient(180deg,var(--accent-bright),var(--accent)); color:#fff; padding:12px 18px; border-radius:13px;
+  font-weight:600; font-size:14px;
+  box-shadow:0 1px 0 rgba(255,255,255,.28) inset, 0 8px 20px var(--accent-glow); z-index:20}
 #editFab:active{transform:scale(.95)}
 .sheet-head{display:none}
-#sheetBackdrop{position:fixed; inset:0; background:rgba(20,24,30,.45); z-index:55; opacity:0; visibility:hidden;
+#sheetBackdrop{position:fixed; inset:0; background:rgba(8,9,11,.6); z-index:55; opacity:0; visibility:hidden;
   transition:opacity .25s, visibility .25s}
 #sheetBackdrop.show{opacity:1; visibility:visible}
 
 @media (max-width:880px){
-  .app{padding:8px; gap:8px}
+  .app{padding:7px; gap:7px}
+  /* on small screens the big drop-shadows read as separate floating "tables";
+     drop them to a hairline so the shell feels like one cohesive dark surface */
+  .topbar,.tools,.stagewrap,.timeline{
+    box-shadow:0 0 0 1px var(--line), 0 1px 0 var(--hair) inset;
+    border-radius:14px;
+  }
 
-  /* top bar: compact, scrollable, no clipping */
-  .topbar{padding:8px 10px; gap:8px; flex-wrap:nowrap; overflow-x:auto; -ms-overflow-style:none; scrollbar-width:none}
+  .topbar{padding:9px 11px; gap:8px; flex-wrap:nowrap; overflow-x:auto; -ms-overflow-style:none; scrollbar-width:none}
   .topbar::-webkit-scrollbar{display:none}
   .brand-tx .bt-sub{display:none}
-  .brand-tx .bt-title{font-size:16px}
-  .brand .mark{width:18px;height:18px}
+  .brand-tx .bt-title{font-size:19px}
+  .brand .mark{width:19px;height:19px}
   .lbl-full{display:none}
   .lbl-mini{display:inline}
   .toggle{gap:6px; margin-left:6px; flex:0 0 auto; font-size:12px}
@@ -273,58 +329,52 @@ body.is-empty #stagePrompt{display:flex}
   .topbar .ghost{flex:0 0 auto; padding:9px 11px}
   .transport{gap:6px; flex:0 0 auto}
 
-  /* main becomes a vertical stack: stage on top, tools strip below.
-     ステージは最低高さを保証し、画面が足りない時はアプリ全体を縦スクロール */
   .app{overflow-y:auto; overflow-x:hidden}
-  .main{flex:1 0 auto; flex-direction:column; gap:8px}   /* 伸びるが内容より縮まない */
+  .main{flex:1 0 auto; flex-direction:column; gap:8px}
+  /* 書き出しは16:9固定。作業エリアを紙にぴったり寄せて、上下の無駄なダーク帯を消す
+     （紙のサイズは幅基準のまま＝変わらない。見えてる枠の下端＝キャンバスの下端になる） */
   .stagewrap{order:0; flex:1 1 auto; min-height:230px}
+  .stage-fit{padding:10px}
   .tools{order:1; flex:0 0 auto; flex-direction:row; height:auto; padding:9px 10px; gap:9px;
     overflow-x:auto; overflow-y:hidden; -ms-overflow-style:none; scrollbar-width:none}
   .tools::-webkit-scrollbar{display:none}
   .tools .lbl{display:none}
   .tool{flex:0 0 auto; width:46px; height:46px}
 
-  .hint{display:none}
-  .stage-fit{padding:10px}
-
-  /* show the edit FAB once something is selected */
   body.has-sel #editFab{display:inline-flex}
 
-  /* inspector -> bottom sheet */
   .inspector{
     position:fixed; left:0; right:0; bottom:0; top:auto; width:auto;
     height:min(72dvh,540px); max-height:72dvh;
     border-radius:22px 22px 0 0; padding:14px 16px 22px;
     transform:translateY(110%); transition:transform .3s cubic-bezier(.32,1.1,.5,1);
-    z-index:60; box-shadow:0 -12px 40px rgba(20,24,30,.22);
+    z-index:60; box-shadow:0 0 0 1px var(--line), 0 -16px 50px rgba(0,0,0,.6);
   }
   .inspector.open{transform:translateY(0)}
   .sheet-head{display:flex; align-items:center; justify-content:space-between; position:relative;
     padding-top:10px; margin-bottom:8px}
   .sheet-head .grab{position:absolute; left:50%; top:2px; transform:translateX(-50%);
     width:44px; height:5px; border-radius:3px; background:var(--line)}
-  .sheet-head .sheet-title{font-weight:800; font-size:15px}
-  .sheet-head button{background:var(--line2); padding:7px 14px; border-radius:10px; font-size:13px;
-    font-weight:700; color:var(--muted)}
+  .sheet-head .sheet-title{font-family:var(--serif); font-weight:500; font-size:16px}
+  .sheet-head button{background:var(--panel-2); padding:7px 14px; border-radius:10px; font-size:13px;
+    font-weight:600; color:var(--muted); box-shadow:0 0 0 1px var(--line) inset}
   .insp-empty{margin-top:14px}
 
-  /* timeline: fixed, compact */
   .timeline{height:172px; flex:0 0 172px}
   .tl-labels{flex-basis:112px}
   .lane-label{padding:0 10px; gap:6px}
-  .lane-label .del{display:none}   /* タッチではhoverで出せず幅だけ食うので隠す（削除はインスペクタから）*/
+  .lane-label .del{display:none}
   .tl-head{padding:8px 12px}
   .tl-head .sub{display:none}
   .dur{margin-left:auto}
 }
 
 @media (max-width:560px){
-  .topbar .ghost{font-size:0; padding:9px}      /* icon-feel: hide text, keep tap target */
-  .topbar .ghost::after{font-size:13px; font-weight:700}
-  #saveBtn::after{content:"💾"} #loadBtn::after{content:"📂"} #exportBtn::after{content:"⬇"} #helpBtn::after{content:"?"}
+  .topbar .ghost{font-size:0; padding:9px}
+  .topbar .ghost::after{font-size:13px; font-weight:600}
+  #saveBtn::after{content:"保存"} #loadBtn::after{content:"開く"} #exportBtn::after{content:"書出"} #helpBtn::after{content:"?"}
 }
 
-/* very small phones: shrink transport so nothing clips */
 @media (max-width:420px){
   .tbtn{width:34px;height:34px;border-radius:10px}
   .tbtn.play{width:42px;height:42px;border-radius:12px}
@@ -332,8 +382,6 @@ body.is-empty #stagePrompt{display:flex}
   .toggle{font-size:11px}
 }
 
-/* short / landscape screens: keep the preview usable.
-   タイムラインを縮め、ステージに最低高さを与え、足りなければスクロール */
 @media (max-height:600px){
   .app{overflow-y:auto; overflow-x:hidden}
   .main{flex:1 0 auto}
@@ -347,97 +395,103 @@ body.is-empty #stagePrompt{display:flex}
 }
 
 /* ---------- help sheet ---------- */
-#helpBackdrop{position:fixed; inset:0; background:rgba(16,18,22,.5); z-index:120;
+#helpBackdrop{position:fixed; inset:0; background:rgba(8,9,11,.62); z-index:120;
   opacity:0; visibility:hidden; transition:opacity .25s, visibility .25s}
 #helpBackdrop.show{opacity:1; visibility:visible}
 #helpSheet{position:fixed; left:50%; bottom:0; transform:translate(-50%,110%);
   width:min(560px,100%); max-height:84dvh; background:var(--panel);
-  border-radius:20px 20px 0 0; box-shadow:0 -14px 44px rgba(16,18,22,.30);
+  border-radius:20px 20px 0 0; box-shadow:0 0 0 1px var(--line), 0 -18px 56px rgba(0,0,0,.6);
   z-index:130; display:flex; flex-direction:column;
   transition:transform .32s cubic-bezier(.32,1.1,.5,1)}
 #helpSheet.open{transform:translate(-50%,0)}
 .hs-head{display:flex; align-items:center; justify-content:space-between; position:relative;
-  padding:15px 18px 11px; border-bottom:1px solid var(--line2); flex:0 0 auto}
+  padding:16px 18px 12px; border-bottom:1px solid var(--line2); flex:0 0 auto}
 .hs-head .hs-grab{position:absolute; left:50%; top:6px; transform:translateX(-50%);
   width:44px; height:5px; border-radius:3px; background:var(--line)}
-.hs-head .hs-title{font-weight:800; font-size:16px}
-.hs-head button{background:var(--line2); padding:7px 14px; border-radius:10px; font-size:13px;
-  font-weight:700; color:var(--muted)}
-.hs-head button:hover{background:#e4e6ea}
-.hs-body{overflow-y:auto; padding:16px 18px 26px; display:flex; flex-direction:column; gap:20px}
-.hs-sec h4{margin:0 0 10px; font-size:12px; font-weight:800; color:var(--accent); letter-spacing:.04em; text-transform:uppercase}
-.hs-step{display:flex; gap:12px; align-items:flex-start; margin-bottom:10px}
-.hs-step .n{flex:0 0 auto; width:24px; height:24px; border-radius:8px; background:var(--ink); color:#fff;
-  display:grid; place-items:center; font-size:12px; font-weight:800}
-.hs-step .t{font-size:13.5px; line-height:1.6; color:var(--ink)}
-.hs-step .t b{font-weight:800}
-.hs-term{margin:0 0 10px; font-size:13px; line-height:1.65; color:var(--muted)}
+.hs-head .hs-title{font-family:var(--serif); font-weight:500; font-size:18px}
+.hs-head button{background:var(--panel-2); padding:7px 14px; border-radius:10px; font-size:13px;
+  font-weight:600; color:var(--muted); box-shadow:0 0 0 1px var(--line) inset}
+.hs-head button:hover{background:var(--elevate);color:var(--ink)}
+.hs-body{overflow-y:auto; padding:18px; display:flex; flex-direction:column; gap:22px}
+.hs-sec h4{margin:0 0 12px; font-size:11px; font-weight:600; color:var(--accent-bright); letter-spacing:.16em; text-transform:uppercase}
+.hs-step{display:flex; gap:12px; align-items:flex-start; margin-bottom:11px}
+.hs-step .n{flex:0 0 auto; width:24px; height:24px; border-radius:7px; background:var(--panel-2); color:var(--ink);
+  box-shadow:0 0 0 1px var(--line) inset; display:grid; place-items:center; font-size:12px; font-weight:600;
+  font-family:"DM Mono",monospace}
+.hs-step .t{font-size:13.5px; line-height:1.7; color:var(--ink-2)}
+.hs-step .t b{font-weight:600; color:var(--ink)}
+.hs-term{margin:0 0 11px; font-size:13px; line-height:1.7; color:var(--muted)}
 .hs-term:last-child{margin-bottom:0}
-.hs-term b{color:var(--ink); font-weight:700}
+.hs-term b{color:var(--ink); font-weight:600}
 
 /* ---------- export chooser ---------- */
-.xm{position:fixed; inset:0; z-index:210; background:rgba(20,24,30,.55); backdrop-filter:blur(4px);
+.xm{position:fixed; inset:0; z-index:210; background:rgba(8,9,11,.66); backdrop-filter:blur(5px);
   display:none; align-items:center; justify-content:center; padding:18px}
 .xm.open{display:flex}
-.xm-card{width:min(420px,100%); background:var(--panel); border-radius:18px; box-shadow:0 20px 60px rgba(20,24,30,.4);
+.xm-card{width:min(420px,100%); background:var(--panel); border-radius:16px;
+  box-shadow:0 0 0 1px var(--line), 0 24px 70px rgba(0,0,0,.66);
   padding:20px; display:flex; flex-direction:column; gap:15px}
-.xm-title{font-size:17px; font-weight:800}
+.xm-title{font-family:var(--serif); font-size:19px; font-weight:500}
 .xm-row{display:flex; align-items:center; gap:12px}
-.xm-lbl{font-size:13px; font-weight:700; color:var(--muted); flex:0 0 78px}
+.xm-lbl{font-size:11px; font-weight:600; color:var(--muted); flex:0 0 78px; letter-spacing:.08em; text-transform:uppercase}
 .seg{display:flex; gap:6px; flex:1; flex-wrap:wrap}
-.seg button{flex:1; min-width:70px; padding:9px 8px; border-radius:10px; background:var(--line2); font-size:13px;
-  font-weight:700; color:var(--muted); transition:transform .1s}
-.seg button.on{background:var(--accent); color:#fff}
+.seg button{flex:1; min-width:70px; padding:9px 8px; border-radius:9px; background:var(--panel-2); font-size:13px;
+  font-weight:600; color:var(--muted); box-shadow:0 0 0 1px var(--line) inset; transition:transform .1s, background .14s}
+.seg button.on{background:var(--accent); color:#fff; box-shadow:0 1px 0 rgba(255,255,255,.25) inset}
 .seg button:active{transform:scale(.96)}
-.xm-note{font-size:12px; line-height:1.6; color:var(--muted); margin:0; min-height:34px}
+.xm-note{font-size:12px; line-height:1.7; color:var(--muted); margin:0; min-height:34px}
 .xm-prog{display:none; align-items:center; gap:10px}
 .xm-prog.show{display:flex}
-.xm-track{flex:1; height:8px; border-radius:99px; background:var(--line2); overflow:hidden}
+.xm-track{flex:1; height:7px; border-radius:99px; background:var(--key-soft); box-shadow:0 0 0 1px var(--line) inset; overflow:hidden}
 .xm-bar{height:100%; width:0%; background:var(--accent); border-radius:99px; transition:width .15s}
 .xm-prog span{font-size:12px; color:var(--muted); flex:0 0 auto}
 .xm-actions{display:flex; gap:8px; flex-wrap:wrap}
-.xm-btn{padding:11px 14px; border-radius:11px; font-size:13.5px; font-weight:700; transition:transform .1s}
+.xm-btn{padding:11px 14px; border-radius:10px; font-size:13.5px; font-weight:600; transition:transform .1s, background .14s}
 .xm-btn:active{transform:scale(.96)}
-.xm-btn.primary{background:var(--accent); color:#fff; flex:1}
-.xm-btn.primary:hover{background:var(--accent-press)}
+.xm-btn.primary{background:linear-gradient(180deg,var(--accent-bright),var(--accent)); color:#fff; flex:1;
+  box-shadow:0 1px 0 rgba(255,255,255,.25) inset, 0 6px 16px var(--accent-glow)}
+.xm-btn.primary:hover{background:linear-gradient(180deg,#F38B72,var(--accent-bright))}
 .xm-btn.primary:disabled{opacity:.5}
-.xm-btn.cancel{background:var(--line2); color:var(--muted)}
-.xm-btn.ghost2{background:transparent; color:var(--muted); border:1.5px solid var(--line); flex:0 0 auto}
-.xm-btn.ghost2:hover{background:var(--line2)}
+.xm-btn.cancel{background:var(--panel-2); color:var(--muted); box-shadow:0 0 0 1px var(--line) inset}
+.xm-btn.ghost2{background:transparent; color:var(--muted); box-shadow:0 0 0 1px var(--line) inset; flex:0 0 auto}
+.xm-btn.ghost2:hover{background:var(--panel-2); color:var(--ink)}
 
 /* ---------- morph editor ---------- */
-.mm{position:fixed; inset:0; z-index:200; background:rgba(20,24,30,.72); backdrop-filter:blur(4px);
+.mm{position:fixed; inset:0; z-index:200; background:rgba(8,9,11,.82); backdrop-filter:blur(5px);
   display:none; flex-direction:column; padding:14px; gap:12px}
 .mm.open{display:flex}
 .mm-bar{display:flex; align-items:center; gap:10px; background:var(--panel); border-radius:12px; padding:10px 14px;
   box-shadow:var(--shadow); flex-wrap:wrap}
-.mm-bar b{font-size:15px; font-weight:800}
+.mm-bar b{font-family:var(--serif); font-size:16px; font-weight:500}
 .mm-bar .mm-hint{font-size:12px; color:var(--muted); flex:1 1 200px; min-width:120px}
-.mm-btn{padding:9px 13px; border-radius:10px; background:var(--line2); font-size:13px; font-weight:700; color:var(--ink)}
-.mm-btn:hover{background:#e4e7ee}
-.mm-btn.primary{background:var(--accent); color:#fff}
-.mm-btn.primary:hover{background:var(--accent-press)}
-.mm-btn.ghost{color:var(--muted); background:transparent}
+.mm-btn{padding:9px 13px; border-radius:10px; background:var(--panel-2); font-size:13px; font-weight:600; color:var(--ink-2);
+  box-shadow:0 0 0 1px var(--line) inset; transition:background .14s,color .14s}
+.mm-btn:hover{background:var(--elevate);color:var(--ink)}
+.mm-btn.primary{background:linear-gradient(180deg,var(--accent-bright),var(--accent)); color:#fff;
+  box-shadow:0 1px 0 rgba(255,255,255,.25) inset, 0 6px 16px var(--accent-glow)}
+.mm-btn.primary:hover{background:linear-gradient(180deg,#F38B72,var(--accent-bright))}
+.mm-btn.ghost{color:var(--muted); background:transparent; box-shadow:none}
 .mm-stage{flex:1; display:flex; gap:12px; min-height:0}
 .mm-panel{flex:1; background:var(--panel); border-radius:12px; box-shadow:var(--shadow); display:flex;
   flex-direction:column; min-width:0; overflow:hidden}
 .mm-imgwrap{flex:1; position:relative; background:
-  linear-gradient(45deg,#eceef3 25%,transparent 25%,transparent 75%,#eceef3 75%) 0 0/20px 20px,
-  linear-gradient(45deg,#eceef3 25%,#fff 25%,#fff 75%,#eceef3 75%) 10px 10px/20px 20px;
+  linear-gradient(45deg,#1f2025 25%,transparent 25%,transparent 75%,#1f2025 75%) 0 0/20px 20px,
+  linear-gradient(45deg,#1f2025 25%,#16171b 25%,#16171b 75%,#1f2025 75%) 10px 10px/20px 20px;
   touch-action:none; cursor:crosshair; overflow:hidden; min-height:0}
 .mm-imgwrap img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; pointer-events:none; user-select:none}
 .mm-pts{position:absolute; inset:0; pointer-events:none}
 .mm-pt{position:absolute; width:22px; height:22px; margin:-11px 0 0 -11px; border-radius:50%; border:2.5px solid #fff;
-  color:#fff; font-size:11px; font-weight:800; display:grid; place-items:center; cursor:grab; pointer-events:auto;
-  box-shadow:0 1px 5px rgba(0,0,0,.4); touch-action:none}
-.mm-pt.sel{box-shadow:0 0 0 3px rgba(255,255,255,.7),0 1px 6px rgba(0,0,0,.5); transform:scale(1.12)}
-.mm-tag{flex:0 0 auto; padding:7px 12px; font-size:12px; font-weight:700; color:var(--muted);
-  border-top:1px solid var(--line2); background:#fcfcfe}
+  color:#fff; font-size:11px; font-weight:700; display:grid; place-items:center; cursor:grab; pointer-events:auto;
+  box-shadow:0 1px 5px rgba(0,0,0,.6); touch-action:none}
+.mm-pt.sel{box-shadow:0 0 0 3px rgba(255,255,255,.7),0 1px 6px rgba(0,0,0,.6); transform:scale(1.12)}
+.mm-tag{flex:0 0 auto; padding:8px 12px; font-size:12px; font-weight:600; color:var(--muted);
+  border-top:1px solid var(--line2); background:#17181d}
 .mm-preview{flex:0 0 auto; background:var(--panel); border-radius:12px; box-shadow:var(--shadow);
   display:flex; align-items:center; gap:14px; padding:10px 16px}
-.mm-preview > span{font-size:13px; font-weight:700; color:var(--muted)}
-.mm-preview input[type=range]{flex:1; max-width:340px; accent-color:var(--key)}
-.mm-preview canvas{height:96px; max-width:220px; background:var(--stage); border-radius:8px; box-shadow:0 1px 6px rgba(0,0,0,.12)}
+.mm-preview > span{font-size:13px; font-weight:600; color:var(--muted)}
+.mm-preview input[type=range]{flex:1; max-width:340px; accent-color:var(--accent)}
+.mm-preview canvas{height:96px; max-width:220px; background:var(--stage); border-radius:8px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.4), 0 2px 10px rgba(0,0,0,.4)}
 @media (max-width:760px){
   .mm-stage{flex-direction:column}
   .mm-preview{flex-wrap:wrap}
@@ -452,11 +506,11 @@ body.is-empty #stagePrompt{display:flex}
   <div class="topbar">
     <div class="brand">
       <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <rect x="9.4" y="1.5" width="5.2" height="2.7" rx="1.1" fill="#FF5C2B"/>
-        <circle cx="12" cy="14" r="8" stroke="#FF5C2B" stroke-width="2.2"/>
-        <path d="M12 14 V8.6" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
-        <path d="M12 14 L15.6 16.1" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round"/>
-        <circle cx="12" cy="14" r="1.4" fill="#FFFFFF"/>
+        <rect x="9.4" y="1.4" width="5.2" height="2.6" rx="1.1" fill="#E2674C"/>
+        <circle cx="12" cy="14" r="8" stroke="#E2674C" stroke-width="2.1"/>
+        <path d="M12 14 V8.6" stroke="#F3EFE9" stroke-width="2.1" stroke-linecap="round"/>
+        <path d="M12 14 L15.6 16.1" stroke="#F3EFE9" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="12" cy="14" r="1.35" fill="#F3EFE9"/>
       </svg>
       <div class="brand-tx"><span class="bt-title">10sec</span><span class="bt-sub">10-second animation</span></div>
     </div>
@@ -731,7 +785,7 @@ function upsertKey(obj, t, pose, animatePop){
 function addObject(type, opts){
   opts = opts || {};
   window.pushHistory&&window.pushHistory();
-  const colorPool = COLORS.filter(c=>c!=="#20242E");
+  const colorPool = COLORS.filter(c=>c!=="#15242E");
   const isImg = type==="image";
   const obj = {
     id: uid++, type,
@@ -763,10 +817,17 @@ function addObject(type, opts){
 const stage = document.getElementById("stage");
 const stageFit = document.getElementById("stageFit");
 let stageScale = 1;
+// iOS はポインタイベントの preventDefault ではスクロールを止められない。
+// ドラッグ中だけ「非パッシブな touchmove」を実際に preventDefault して、ページが動くのを確実に殺す。
+let _dragActive = false;
+document.addEventListener("touchmove", e=>{ if(_dragActive) e.preventDefault(); }, {passive:false});
+// 取りこぼし保険：どんな形でも指/ポインタが離れたらドラッグ状態を解除（スクロール固着を防止）
+["pointerup","pointercancel","touchend","touchcancel"].forEach(ev=>
+  document.addEventListener(ev, ()=>{ _dragActive=false; document.body.classList.remove("dragging-obj"); }));
 const elMap = new Map();
 
 function fitStage(){
-  const pad = 36;
+  const pad = 28;
   const aw = stageFit.clientWidth - pad, ah = stageFit.clientHeight - pad;
   if(aw<=0 || ah<=0) return;                       // レイアウト未確定のときは触らない
   stageScale = Math.max(0.05, Math.min(aw/STAGE_W, ah/STAGE_H));
@@ -837,10 +898,13 @@ function attachDrag(obj, el){
     e.preventDefault(); selectObject(obj.id);
     const p = poseAt(obj,currentTime);
     start = {mx:e.clientX, my:e.clientY, x:p.x, y:p.y};
-    el.classList.add("dragging"); handle.setPointerCapture(e.pointerId);
+    _dragActive = true;
+    el.classList.add("dragging"); document.body.classList.add("dragging-obj");
+    handle.setPointerCapture(e.pointerId);
   });
   handle.addEventListener("pointermove",e=>{
     if(!start) return;
+    e.preventDefault();
     const dx=(e.clientX-start.mx)/stageScale, dy=(e.clientY-start.my)/stageScale;
     let nx = clamp(start.x+dx, 0, STAGE_W), ny = clamp(start.y+dy, 0, STAGE_H);
     const p = poseAt(obj,currentTime); p.x=nx; p.y=ny;
@@ -849,12 +913,15 @@ function attachDrag(obj, el){
     obj._live = p;
     render2Live(obj, p);
   });
-  handle.addEventListener("pointerup",e=>{
+  function endDrag(){
     if(!start) return;
     const p = obj._live || poseAt(obj,currentTime);
     commitPose(obj, p);
-    obj._live=null; start=null; el.classList.remove("dragging");
-  });
+    obj._live=null; start=null; _dragActive=false;
+    el.classList.remove("dragging"); document.body.classList.remove("dragging-obj");
+  }
+  handle.addEventListener("pointerup", endDrag);
+  handle.addEventListener("pointercancel", endDrag);
 }
 function render2Live(obj,p){
   const el=elMap.get(obj.id);
@@ -1406,12 +1473,12 @@ function buildStandalone(){
   return `<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>10sec</title>
-<style>html,body{margin:0;height:100%;background:#E9EAED;display:grid;place-items:center;font-family:system-ui}
+<style>html,body{margin:0;height:100%;background:#131316;display:grid;place-items:center;font-family:system-ui}
 #fit{width:min(92vw,900px);aspect-ratio:16/9;position:relative}
-#st{position:absolute;inset:0;background:#F6F7F8;border-radius:12px;box-shadow:0 10px 44px rgba(16,18,22,.16);overflow:hidden}
+#st{position:absolute;inset:0;background:#EFEDE7;border-radius:12px;box-shadow:0 0 0 1px rgba(0,0,0,.4),0 30px 70px rgba(0,0,0,.5);overflow:hidden}
 .o{position:absolute}.o>div{width:100%;height:100%}
-button{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);border:none;background:#FF5C2B;color:#fff;
-padding:12px 22px;border-radius:12px;font:600 15px system-ui;cursor:pointer;box-shadow:0 6px 16px rgba(255,92,43,.45)}</style>
+button{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);border:none;background:#E2674C;color:#fff;
+padding:12px 22px;border-radius:12px;font:600 15px system-ui;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 6px 16px rgba(226,103,76,.45)}</style>
 </head><body><div id="fit"><div id="st"></div></div><button onclick="play()">▶ もう一回</button>
 <script>
 const P=${data};const SW=800,SH=450;
@@ -1484,10 +1551,11 @@ boot();
 <script>
 "use strict";
 /* =========================================================
-   Morph engine + correspondence-point editor
+   B. 中割り（モーフ）エンジン + 対応点エディタ
+   ※ 幾何演算は標準HTML書き出しの描画ロジックと同一
    ========================================================= */
 
-/* ---- geometry ---- */
+/* ---- 幾何ヘルパ（normalized座標 0..1 / A基準で三角分割） ---- */
 function _circum(a,b,c){
   const d=2*(a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y));
   if(Math.abs(d)<1e-12) return {x:0,y:0,r2:Infinity};
@@ -1495,50 +1563,63 @@ function _circum(a,b,c){
   const uy=((a.x*a.x+a.y*a.y)*(c.x-b.x)+(b.x*b.x+b.y*b.y)*(a.x-c.x)+(c.x*c.x+c.y*c.y)*(b.x-a.x))/d;
   return {x:ux,y:uy,r2:(a.x-ux)*(a.x-ux)+(a.y-uy)*(a.y-uy)};
 }
+/* Bowyer-Watson Delaunay。pts=[{x,y},...] を返り値=三角形indexの配列 */
 function delaunay(pts){
-  const n=pts.length; if(n<3) return [];
-  let mnx=1e9,mny=1e9,mxx=-1e9,mxy=-1e9;
-  pts.forEach(p=>{mnx=Math.min(mnx,p.x);mny=Math.min(mny,p.y);mxx=Math.max(mxx,p.x);mxy=Math.max(mxy,p.y);});
-  const dm=Math.max(mxx-mnx,mxy-mny)||1, mx=(mnx+mxx)/2, my=(mny+mxy)/2;
-  const P=pts.map(p=>({x:p.x,y:p.y}));
-  P.push({x:mx-20*dm,y:my-dm},{x:mx,y:my+20*dm},{x:mx+20*dm,y:my-dm});
-  let T=[[n,n+1,n+2]];
-  for(let i=0;i<n;i++){
-    const p=P[i], bad=[];
-    T.forEach((t,ti)=>{const cc=_circum(P[t[0]],P[t[1]],P[t[2]]);const dx=p.x-cc.x,dy=p.y-cc.y;if(dx*dx+dy*dy<=cc.r2+1e-9)bad.push(ti);});
-    const ed=[];
-    bad.forEach(ti=>{const t=T[ti];ed.push([t[0],t[1]],[t[1],t[2]],[t[2],t[0]]);});
-    const bn=[];
-    for(let a=0;a<ed.length;a++){let sh=false;for(let b=0;b<ed.length;b++){if(a!==b&&((ed[a][0]===ed[b][0]&&ed[a][1]===ed[b][1])||(ed[a][0]===ed[b][1]&&ed[a][1]===ed[b][0]))){sh=true;break;}}if(!sh)bn.push(ed[a]);}
-    T=T.filter((t,ti)=>!bad.includes(ti));
-    bn.forEach(e=>T.push([e[0],e[1],i]));
+  if(pts.length<3) return [];
+  const P = pts.map(p=>({x:p.x, y:p.y}));
+  // super-triangle
+  const st=P.length;
+  P.push({x:-10,y:-10},{x:10,y:-10},{x:0,y:10});
+  let tris=[[st,st+1,st+2]];
+  for(let i=0;i<st;i++){
+    const p=P[i], bad=[], edges=[];
+    for(const t of tris){
+      const cc=_circum(P[t[0]],P[t[1]],P[t[2]]);
+      const dx=p.x-cc.x, dy=p.y-cc.y;
+      if(dx*dx+dy*dy < cc.r2) bad.push(t);
+    }
+    for(const t of bad){
+      for(let e=0;e<3;e++){
+        const a=t[e], b=t[(e+1)%3];
+        let shared=false;
+        for(const ot of bad){ if(ot===t) continue;
+          if((ot.includes(a)&&ot.includes(b))){ shared=true; break; } }
+        if(!shared) edges.push([a,b]);
+      }
+    }
+    tris = tris.filter(t=>!bad.includes(t));
+    for(const e of edges) tris.push([e[0],e[1],i]);
   }
-  return T.filter(t=>t[0]<n&&t[1]<n&&t[2]<n);
+  // drop triangles touching the super-triangle
+  return tris.filter(t=>t[0]<st && t[1]<st && t[2]<st);
 }
 function _affine(s,d){
   const det=s[0].x*(s[1].y-s[2].y)-s[1].x*(s[0].y-s[2].y)+s[2].x*(s[0].y-s[1].y);
   if(Math.abs(det)<1e-9) return null;
-  const i00=(s[1].y-s[2].y)/det,i01=(s[2].x-s[1].x)/det,i02=(s[1].x*s[2].y-s[2].x*s[1].y)/det;
-  const i10=(s[2].y-s[0].y)/det,i11=(s[0].x-s[2].x)/det,i12=(s[2].x*s[0].y-s[0].x*s[2].y)/det;
-  const i20=(s[0].y-s[1].y)/det,i21=(s[1].x-s[0].x)/det,i22=(s[0].x*s[1].y-s[1].x*s[0].y)/det;
+  const i00=(s[1].y-s[2].y)/det,i01=(s[2].x-s[1].x)/det,i02=(s[1].x*s[2].y-s[2].x*s[1].y)/det,
+        i10=(s[2].y-s[0].y)/det,i11=(s[0].x-s[2].x)/det,i12=(s[2].x*s[0].y-s[0].x*s[2].y)/det,
+        i20=(s[0].y-s[1].y)/det,i21=(s[1].x-s[0].x)/det,i22=(s[0].x*s[1].y-s[1].x*s[0].y)/det;
   return [d[0].x*i00+d[1].x*i10+d[2].x*i20, d[0].y*i00+d[1].y*i10+d[2].y*i20,
           d[0].x*i01+d[1].x*i11+d[2].x*i21, d[0].y*i01+d[1].y*i11+d[2].y*i21,
           d[0].x*i02+d[1].x*i12+d[2].x*i22, d[0].y*i02+d[1].y*i12+d[2].y*i22];
 }
 function _inflate(P,e){
   const cx=(P[0].x+P[1].x+P[2].x)/3, cy=(P[0].y+P[1].y+P[2].y)/3;
-  return P.map(p=>{const vx=p.x-cx,vy=p.y-cy,l=Math.hypot(vx,vy)||1;return {x:p.x+vx/l*e,y:p.y+vy/l*e};});
+  return P.map(p=>{ const vx=p.x-cx, vy=p.y-cy, l=Math.hypot(vx,vy)||1;
+    return {x:p.x+vx/l*e, y:p.y+vy/l*e}; });
 }
 function _drawTri(ctx,img,s,d){
-  ctx.save();
-  ctx.beginPath(); ctx.moveTo(d[0].x,d[0].y); ctx.lineTo(d[1].x,d[1].y); ctx.lineTo(d[2].x,d[2].y); ctx.closePath(); ctx.clip();
+  ctx.save(); ctx.beginPath();
+  ctx.moveTo(d[0].x,d[0].y); ctx.lineTo(d[1].x,d[1].y); ctx.lineTo(d[2].x,d[2].y); ctx.closePath();
+  ctx.clip();
   const m=_affine(s,d);
   if(m){ ctx.setTransform(m[0],m[1],m[2],m[3],m[4],m[5]); ctx.drawImage(img,0,0); }
   ctx.restore();
 }
 function computeTris(points){
-  if(points.length<3) return [];
-  return delaunay(points.map(p=>({x:(p.ax+p.bx)/2, y:(p.ay+p.by)/2})));
+  // A側（ax,ay）で三角分割
+  const tris=delaunay(points.map(p=>({x:p.ax, y:p.ay})));
+  return tris;
 }
 function renderMorph(ctx,w,h,A,B,nA,nB,pts,tris,m){
   ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,w,h);
@@ -1550,269 +1631,313 @@ function renderMorph(ctx,w,h,A,B,nA,nB,pts,tris,m){
   }
   const I=p=>({x:(p.ax+(p.bx-p.ax)*m)*w, y:(p.ay+(p.by-p.ay)*m)*h});
   ctx.globalAlpha=1;
-  tris.forEach(t=>{ const d=_inflate([I(pts[t[0]]),I(pts[t[1]]),I(pts[t[2]])],0.7);
+  tris.forEach(t=>{
+    const d=_inflate([I(pts[t[0]]),I(pts[t[1]]),I(pts[t[2]])],.7);
     const s=[{x:pts[t[0]].ax*nA.w,y:pts[t[0]].ay*nA.h},{x:pts[t[1]].ax*nA.w,y:pts[t[1]].ay*nA.h},{x:pts[t[2]].ax*nA.w,y:pts[t[2]].ay*nA.h}];
-    _drawTri(ctx,A,s,d); });
+    _drawTri(ctx,A,s,d);
+  });
   ctx.globalAlpha=m;
-  tris.forEach(t=>{ const d=_inflate([I(pts[t[0]]),I(pts[t[1]]),I(pts[t[2]])],0.7);
+  tris.forEach(t=>{
+    const d=_inflate([I(pts[t[0]]),I(pts[t[1]]),I(pts[t[2]])],.7);
     const s=[{x:pts[t[0]].bx*nB.w,y:pts[t[0]].by*nB.h},{x:pts[t[1]].bx*nB.w,y:pts[t[1]].by*nB.h},{x:pts[t[2]].bx*nB.w,y:pts[t[2]].by*nB.h}];
-    _drawTri(ctx,B,s,d); });
+    _drawTri(ctx,B,s,d);
+  });
   ctx.globalAlpha=1; ctx.setTransform(1,0,0,1,0,0);
 }
 
-/* ---- stage painting ---- */
+/* ---- 画像ロード / 描画 ---- */
 function loadMorphImgs(obj){
-  if(!obj.srcA||!obj.srcB) return;
-  if(!obj._imgA){ obj._imgA=new Image(); obj._imgA.onload=()=>render(); obj._imgA.src=obj.srcA; }
-  if(!obj._imgB){ obj._imgB=new Image(); obj._imgB.onload=()=>render(); obj._imgB.src=obj.srcB; }
+  if(!obj.srcA || !obj.srcB) return;
+  if(obj._imgA && obj._imgB && obj._imgA.complete && obj._imgB.complete){ paintMorph(obj, poseAt(obj,currentTime).morph||0); return; }
+  const a=new Image(), b=new Image();
+  obj._imgA=a; obj._imgB=b;
+  a.onload=()=>paintMorph(obj, poseAt(obj,currentTime).morph||0);
+  b.onload=()=>paintMorph(obj, poseAt(obj,currentTime).morph||0);
+  a.src=obj.srcA; b.src=obj.srcB;
 }
-function paintMorph(obj,m){
+function paintMorph(obj, m){
   const el=elMap.get(obj.id); if(!el) return;
   const cv=el.querySelector("canvas"); if(!cv) return;
-  const w=Math.round(obj.w), h=Math.round(obj.h);
-  if(cv.width!==w) cv.width=w;
-  if(cv.height!==h) cv.height=h;
-  loadMorphImgs(obj);
-  renderMorph(cv.getContext("2d"), w, h, obj._imgA, obj._imgB, obj.natA, obj.natB, obj.points, obj.tris, Math.max(0,Math.min(1,m||0)));
+  if(!obj._imgA || !obj._imgB){ loadMorphImgs(obj); return; }
+  renderMorph(cv.getContext("2d"), cv.width, cv.height, obj._imgA, obj._imgB,
+              obj.natA, obj.natB, obj.points, obj.tris, m);
 }
 
-/* ---- serialization helper (strip runtime _props) ---- */
+/* ---- シリアライズ（transient な _xxx を落とす） ---- */
 function cleanObjects(){
-  return project.objects.map(o=>{ const c={}; for(const k in o){ if(k[0]!=="_") c[k]=o[k]; } return c; });
+  return project.objects.map(o=>{
+    const c={}; for(const k in o){ if(k[0]==="_") continue; c[k]=o[k]; }
+    return c;
+  });
 }
 
-/* ---- creation flow ---- */
-function fitBox(nw,nh){ const k=Math.min(320/nw,280/nh,1); return {w:Math.max(24,Math.round(nw*k)), h:Math.max(24,Math.round(nh*k))}; }
-function readImageFile(file,cb){
-  if(!file) return;
-  if(file.size>8*1024*1024){ toast("画像が大きすぎ（8MBまで）"); return; }
-  const rd=new FileReader();
-  rd.onload=()=>{ const img=new Image(); img.onload=()=>cb({src:rd.result,natW:img.naturalWidth||100,natH:img.naturalHeight||100}); img.onerror=()=>toast("画像を読めなかった…"); img.src=rd.result; };
-  rd.onerror=()=>toast("ファイルを読めなかった…");
-  rd.readAsDataURL(file);
+/* ---- morph オブジェクト生成 ---- */
+function defaultMorphPoints(){
+  // 四隅 + 中央（A=B で同じ位置からスタート）
+  const C=[[0,0],[1,0],[1,1],[0,1],[.5,.5]];
+  return C.map(([x,y])=>({ax:x,ay:y,bx:x,by:y}));
 }
-function createMorph(A,B){
+function createMorph(srcA, natA, srcB, natB){
   window.pushHistory&&window.pushHistory();
-  const box=fitBox(A.natW,A.natH);
-  const corners=[{ax:0,ay:0,bx:0,by:0},{ax:1,ay:0,bx:1,by:0},{ax:1,ay:1,bx:1,by:1},{ax:0,ay:1,bx:0,by:1}];
-  const obj={ id:uid++, type:"morph", name:"中割り", color:"#000",
-    w:box.w, h:box.h, srcA:A.src, srcB:B.src,
-    natA:{w:A.natW,h:A.natH}, natB:{w:B.natW,h:B.natH},
-    points:corners, tris:computeTris(corners),
-    easing:"smooth", base:basePose(), keys:[] };
-  obj.base.x=STAGE_W/2; obj.base.y=STAGE_H/2; obj.base.morph=0;
-  obj.keys.push({t:0, pose:{...obj.base, morph:0}});
-  obj.keys.push({t:project.duration, pose:{...obj.base, morph:1}});
+  const maxW=320,maxH=280;
+  let w=natA.w||200, h=natA.h||200;
+  const k=Math.min(maxW/w,maxH/h,1); w=Math.max(24,Math.round(w*k)); h=Math.max(24,Math.round(h*k));
+  const points=defaultMorphPoints();
+  const obj={
+    id:uid++, type:"morph", name:"中割り",
+    color:"#E2674C", w, h, easing:"smooth",
+    srcA, srcB, natA:{w:natA.w,h:natA.h}, natB:{w:natB.w,h:natB.h},
+    points, tris:computeTris(points),
+    base:basePose(), keys:[]
+  };
+  const off=(project.objects.length%5)*26 - 52;
+  obj.base.x=STAGE_W/2+off; obj.base.y=STAGE_H/2+off*.5; obj.base.morph=0;
+  obj.keys.push({t:0,pose:{...obj.base}});
   project.objects.push(obj);
   selectedId=obj.id; selectedKf={objId:obj.id,time:0};
   document.body.classList.add("has-sel");
   buildStage(); renderTimeline(); renderInspector(); render();
-  openMorphEditor(obj);
+  toast("中割りを追加（対応点を打つとキレイに化けるよ）");
 }
 
+/* ---- morph ファイル入力 ---- */
+let _pendingMorph=null;
 document.getElementById("morphFile").addEventListener("change",e=>{
-  const f=e.target.files[0]; e.target.value=""; if(!f) return;
-  readImageFile(f,info=>{
-    const mode=window.__morphMode;
-    if(mode==="createA"){ window.__morphTempA=info; window.__morphMode="createB"; document.getElementById("morphFile").click(); }
-    else if(mode==="createB"){ window.__morphMode=null; createMorph(window.__morphTempA,info); }
-    else if(mode==="replaceA" && mmObj){ mmObj.srcA=info.src; mmObj.natA={w:info.natW,h:info.natH}; delete mmObj._imgA; mmImgA.src=info.src; mmRenderPreview(); }
-    else if(mode==="replaceB" && mmObj){ mmObj.srcB=info.src; mmObj.natB={w:info.natW,h:info.natH}; delete mmObj._imgB; mmImgB.src=info.src; mmRenderPreview(); }
-    window.__morphMode = (mode==="createB")?null:window.__morphMode;
-  });
+  const f=e.target.files[0]; e.target.value="";
+  if(!f) return;
+  if(f.size>8*1024*1024){ toast("画像が大きすぎ（8MBまで）"); return; }
+  const rd=new FileReader();
+  rd.onload=()=>{
+    const img=new Image();
+    img.onload=()=>{
+      const nat={w:img.naturalWidth||200,h:img.naturalHeight||200};
+      const mode=window.__morphMode;
+      if(mode==="createA"){
+        _pendingMorph={src:rd.result, nat};
+        window.__morphMode="createB";
+        toast("次に『絵B』を選んでね");
+        document.getElementById("morphFile").click();
+      } else if(mode==="createB"){
+        if(!_pendingMorph){ window.__morphMode=null; return; }
+        createMorph(_pendingMorph.src,_pendingMorph.nat, rd.result, nat);
+        _pendingMorph=null; window.__morphMode=null;
+      } else if(mode==="replaceA"||mode==="replaceB"){
+        const obj=getObj(selectedId); if(!obj||obj.type!=="morph"){ window.__morphMode=null; return; }
+        window.pushHistory&&window.pushHistory();
+        if(mode==="replaceA"){ obj.srcA=rd.result; obj.natA={w:nat.w,h:nat.h}; }
+        else { obj.srcB=rd.result; obj.natB={w:nat.w,h:nat.h}; }
+        obj._imgA=null; obj._imgB=null; loadMorphImgs(obj);
+        if(_mm.open) mmReload(obj);
+        render(); window.__morphMode=null; toast("差し替えたよ");
+      }
+    };
+    img.onerror=()=>{ toast("画像を読めなかった…"); window.__morphMode=null; };
+    img.src=rd.result;
+  };
+  rd.onerror=()=>{ toast("ファイルを読めなかった…"); window.__morphMode=null; };
+  rd.readAsDataURL(f);
 });
 
-/* ---- editor ---- */
-const mmModal=document.getElementById("morphModal");
-const mmWrapA=document.getElementById("mmWrapA"), mmWrapB=document.getElementById("mmWrapB");
+/* ---- 対応点エディタ ---- */
+const _mm={open:false, obj:null, sel:null};
+const morphModal=document.getElementById("morphModal");
 const mmImgA=document.getElementById("mmImgA"), mmImgB=document.getElementById("mmImgB");
+const mmWrapA=document.getElementById("mmWrapA"), mmWrapB=document.getElementById("mmWrapB");
 const mmPtsA=document.getElementById("mmPtsA"), mmPtsB=document.getElementById("mmPtsB");
-const mmPrev=document.getElementById("mmPrev"), mmPrevV=document.getElementById("mmPrevV");
-const mmPrevCanvas=document.getElementById("mmPrevCanvas");
-let mmObj=null, editPts=[], editTris=[], mmSel=null;
+const mmPrev=document.getElementById("mmPrev"), mmPrevV=document.getElementById("mmPrevV"), mmPrevCanvas=document.getElementById("mmPrevCanvas");
 
-function imgDispRect(wrap,nw,nh){
-  const W=wrap.clientWidth, H=wrap.clientHeight, ar=nw/nh, par=W/H;
-  let dw,dh; if(ar>par){dw=W;dh=W/ar;} else {dh=H;dw=H*ar;}
-  return {x:(W-dw)/2, y:(H-dh)/2, w:dw, h:dh};
-}
+function ptColor(i){ return `hsl(${(i*47)%360} 85% 58%)`; }
 function openMorphEditor(obj){
-  mmObj=obj; mmSel=null;
-  editPts=obj.points.map(p=>({...p}));
-  editTris=computeTris(editPts);
+  if(obj.type!=="morph") return;
+  _mm.open=true; _mm.obj=obj; _mm.sel=null;
+  _mm.backup=JSON.parse(JSON.stringify(obj.points)); // キャンセル用スナップ
+  mmReload(obj);
+  morphModal.classList.add("open");
+}
+function mmReload(obj){
   mmImgA.src=obj.srcA; mmImgB.src=obj.srcB;
-  mmModal.classList.add("open");
-  // re-render when images ready
-  const ready=()=>{ mmRenderMarkers(); mmRenderPreview(); };
-  mmImgA.onload=ready; mmImgB.onload=ready;
-  requestAnimationFrame(()=>{ mmRenderMarkers(); mmRenderPreview(); });
+  mmDrawPts(); mmPreview();
 }
-function closeMorphEditor(){ mmModal.classList.remove("open"); mmObj=null; }
-
-function mmMarker(i,x,y,side){
-  const d=document.createElement("div");
-  d.className="mm-pt"+(mmSel===i?" sel":"");
-  d.style.left=x+"px"; d.style.top=y+"px";
-  d.style.background=`hsl(${(i*61)%360} 78% 52%)`;
-  d.textContent=(i-3);
-  mmAttachMarker(d,i,side);
-  return d;
-}
-function mmRenderMarkers(){
-  if(!mmObj) return;
-  const ra=imgDispRect(mmWrapA,mmObj.natA.w,mmObj.natA.h);
-  const rb=imgDispRect(mmWrapB,mmObj.natB.w,mmObj.natB.h);
+function mmDrawPts(){
+  const obj=_mm.obj; if(!obj) return;
   mmPtsA.innerHTML=""; mmPtsB.innerHTML="";
-  for(let i=4;i<editPts.length;i++){
-    const p=editPts[i];
-    mmPtsA.appendChild(mmMarker(i, ra.x+p.ax*ra.w, ra.y+p.ay*ra.h, "a"));
-    mmPtsB.appendChild(mmMarker(i, rb.x+p.bx*rb.w, rb.y+p.by*rb.h, "b"));
-  }
+  obj.points.forEach((p,i)=>{
+    [["A",mmPtsA,"ax","ay"],["B",mmPtsB,"bx","by"]].forEach(([side,host,kx,ky])=>{
+      const d=document.createElement("div");
+      d.className="mm-pt"+(_mm.sel===i?" sel":"");
+      d.style.left=(p[kx]*100)+"%"; d.style.top=(p[ky]*100)+"%";
+      d.style.background=ptColor(i); d.textContent=i+1;
+      d.dataset.i=i; d.dataset.side=side;
+      mmAttachPt(d,i,side,kx,ky);
+      host.appendChild(d);
+    });
+  });
 }
-function mmRenderPreview(){
-  if(!mmObj) return;
+function mmAttachPt(el,i,side,kx,ky){
+  const host = side==="A"?mmWrapA:mmWrapB;
+  let drag=false;
+  el.addEventListener("pointerdown",e=>{
+    e.stopPropagation(); drag=true; _mm.sel=i;
+    el.setPointerCapture(e.pointerId);
+    mmPtsA.querySelectorAll(".mm-pt").forEach(n=>n.classList.toggle("sel",+n.dataset.i===i));
+    mmPtsB.querySelectorAll(".mm-pt").forEach(n=>n.classList.toggle("sel",+n.dataset.i===i));
+  });
+  el.addEventListener("pointermove",e=>{
+    if(!drag) return;
+    const r=host.getBoundingClientRect();
+    const x=clamp((e.clientX-r.left)/r.width,0,1), y=clamp((e.clientY-r.top)/r.height,0,1);
+    _mm.obj.points[i][kx]=x; _mm.obj.points[i][ky]=y;
+    el.style.left=(x*100)+"%"; el.style.top=(y*100)+"%";
+    mmPreview();
+  });
+  el.addEventListener("pointerup",()=>{ drag=false; });
+}
+function mmAddPoint(side, e){
+  const obj=_mm.obj; if(!obj) return;
+  const host=side==="A"?mmWrapA:mmWrapB;
+  const r=host.getBoundingClientRect();
+  const x=clamp((e.clientX-r.left)/r.width,0,1), y=clamp((e.clientY-r.top)/r.height,0,1);
+  obj.points.push({ax:x,ay:y,bx:x,by:y});
+  obj.tris=computeTris(obj.points);
+  _mm.sel=obj.points.length-1;
+  mmDrawPts(); mmPreview();
+}
+mmWrapA.addEventListener("pointerdown",e=>{ if(e.target===mmWrapA||e.target===mmImgA||e.target===mmPtsA) mmAddPoint("A",e); });
+mmWrapB.addEventListener("pointerdown",e=>{ if(e.target===mmWrapB||e.target===mmImgB||e.target===mmPtsB) mmAddPoint("B",e); });
+
+function mmPreview(){
+  const obj=_mm.obj; if(!obj) return;
+  obj.tris=computeTris(obj.points);
+  const cv=mmPrevCanvas; cv.width=Math.round(obj.w); cv.height=Math.round(obj.h);
+  if(!obj._imgA||!obj._imgB) loadMorphImgs(obj);
   const m=(+mmPrev.value)/100; mmPrevV.textContent=Math.round(m*100)+"%";
-  const ar=mmObj.w/mmObj.h; let w=200, h=Math.round(w/ar); if(h>96){ h=96; w=Math.round(h*ar); }
-  mmPrevCanvas.width=w; mmPrevCanvas.height=h;
-  renderMorph(mmPrevCanvas.getContext("2d"), w, h, mmImgA, mmImgB, mmObj.natA, mmObj.natB, editPts, editTris, m);
+  if(obj._imgA&&obj._imgB)
+    renderMorph(cv.getContext("2d"),cv.width,cv.height,obj._imgA,obj._imgB,obj.natA,obj.natB,obj.points,obj.tris,m);
 }
+mmPrev.addEventListener("input",mmPreview);
 
-function mmAttachMarker(el,i,side){
-  let st=null;
-  el.addEventListener("pointerdown",ev=>{
-    ev.stopPropagation(); ev.preventDefault();
-    mmSel=i; el.setPointerCapture(ev.pointerId);
-    const wrap=side==="a"?mmWrapA:mmWrapB;
-    st={wrap, nat:side==="a"?mmObj.natA:mmObj.natB};
-    mmRenderMarkers();
-  });
-  el.addEventListener("pointermove",ev=>{
-    if(!st) return;
-    const r=st.wrap.getBoundingClientRect();
-    const disp=imgDispRect(st.wrap, st.nat.w, st.nat.h);
-    let nx=((ev.clientX-r.left)-disp.x)/disp.w, ny=((ev.clientY-r.top)-disp.y)/disp.h;
-    nx=Math.max(0,Math.min(1,nx)); ny=Math.max(0,Math.min(1,ny));
-    if(side==="a"){ editPts[i].ax=nx; editPts[i].ay=ny; } else { editPts[i].bx=nx; editPts[i].by=ny; }
-    editTris=computeTris(editPts);
-    mmRenderMarkers(); mmRenderPreview();
-  });
-  el.addEventListener("pointerup",()=>{ st=null; });
-}
-
-function mmAddPoint(wrap,nat,ev){
-  const r=wrap.getBoundingClientRect();
-  const disp=imgDispRect(wrap,nat.w,nat.h);
-  let nx=((ev.clientX-r.left)-disp.x)/disp.w, ny=((ev.clientY-r.top)-disp.y)/disp.h;
-  if(nx<0||nx>1||ny<0||ny>1) return;
-  editPts.push({ax:nx,ay:ny,bx:nx,by:ny});
-  mmSel=editPts.length-1;
-  editTris=computeTris(editPts);
-  mmRenderMarkers(); mmRenderPreview();
-}
-mmWrapA.addEventListener("pointerdown",ev=>{ if(ev.target===mmWrapA||ev.target===mmImgA||ev.target===mmPtsA) mmAddPoint(mmWrapA,mmObj.natA,ev); });
-mmWrapB.addEventListener("pointerdown",ev=>{ if(ev.target===mmWrapB||ev.target===mmImgB||ev.target===mmPtsB) mmAddPoint(mmWrapB,mmObj.natB,ev); });
-
-mmPrev.addEventListener("input",mmRenderPreview);
-
-document.getElementById("mmClear").addEventListener("click",()=>{
-  editPts=editPts.slice(0,4); mmSel=null; editTris=computeTris(editPts);
-  mmRenderMarkers(); mmRenderPreview();
-});
-document.getElementById("mmCancel").addEventListener("click",closeMorphEditor);
-document.getElementById("mmApply").addEventListener("click",()=>{
-  if(!mmObj) return;
-  window.pushHistory&&window.pushHistory();
-  mmObj.points=editPts.map(p=>({...p}));
-  mmObj.tris=computeTris(mmObj.points);
-  delete mmObj._imgA; delete mmObj._imgB;
-  const id=mmObj.id;
-  closeMorphEditor();
-  buildStage(); selectObject(id); render();
-  toast("中割りを更新したよ");
-});
 document.getElementById("mmReplaceA").addEventListener("click",()=>{ window.__morphMode="replaceA"; document.getElementById("morphFile").click(); });
 document.getElementById("mmReplaceB").addEventListener("click",()=>{ window.__morphMode="replaceB"; document.getElementById("morphFile").click(); });
+document.getElementById("mmClear").addEventListener("click",()=>{
+  const obj=_mm.obj; if(!obj) return;
+  obj.points=defaultMorphPoints(); obj.tris=computeTris(obj.points); _mm.sel=null;
+  mmDrawPts(); mmPreview();
+});
+document.getElementById("mmCancel").addEventListener("click",()=>closeMorphEditor(false));
+document.getElementById("mmApply").addEventListener("click",()=>{
+  const obj=_mm.obj; if(obj){ window.pushHistory&&window.pushHistory(); obj.tris=computeTris(obj.points); render(); renderInspector(); }
+  closeMorphEditor(true); toast("対応点を適用");
+});
+function closeMorphEditor(applied){
+  // 適用してなければ、編集中にライブで書き換えた points を元に戻す
+  if(!applied && _mm.obj && _mm.backup){
+    _mm.obj.points = _mm.backup;
+    _mm.obj.tris = computeTris(_mm.obj.points);
+    render();
+  }
+  _mm.open=false; _mm.backup=null;
+  morphModal.classList.remove("open");
+}
 
 document.addEventListener("keydown",e=>{
-  if(!mmModal.classList.contains("open")) return;
-  if(e.target.matches("input,textarea,select")) return;
-  if((e.key==="Delete"||e.key==="Backspace") && mmSel!=null && mmSel>=4){
-    editPts.splice(mmSel,1); mmSel=null; editTris=computeTris(editPts);
-    mmRenderMarkers(); mmRenderPreview(); e.preventDefault();
+  if(!_mm.open) return;
+  if((e.key==="Delete"||e.key==="Backspace") && _mm.sel!=null){
+    const obj=_mm.obj;
+    if(obj.points.length>3){ obj.points.splice(_mm.sel,1); obj.tris=computeTris(obj.points); _mm.sel=null; mmDrawPts(); mmPreview(); }
+    else toast("最低3点は必要");
   }
   if(e.key==="Escape") closeMorphEditor();
 });
-
-window.addEventListener("resize",()=>{ if(mmModal.classList.contains("open")){ mmRenderMarkers(); mmRenderPreview(); } });
 </script>
 
 <script>
 "use strict";
 /* =========================================================
-   Undo / Redo  +  Onion skin
+   C. Undo / Redo + オニオンスキン
    ========================================================= */
-
-/* ---- history ---- */
-const _undo=[], _redo=[];
-function _snap(){
-  return JSON.stringify({
-    duration: project.duration,
-    objects: cleanObjects(),
-    sel: selectedId,
-    t: currentTime
+const _hist=[], _redo=[]; const _HMAX=60;
+/* data URL は重いので履歴にはトークン参照だけ積む（同一URLは1回だけ保持）。
+   保存/書き出しが使う cleanObjects() は実URLのまま＝そっちは無改変。 */
+const _srcTok=new Map(), _tokSrc=new Map(); let _tokN=0;
+function _tokenize(s){
+  if(typeof s!=="string" || !/^data:/.test(s)) return s;
+  let t=_srcTok.get(s);
+  if(!t){ t="@s"+(_tokN++); _srcTok.set(s,t); _tokSrc.set(t,s); }
+  return t;
+}
+function _detok(s){ return (typeof s==="string" && s[0]==="@" && _tokSrc.has(s)) ? _tokSrc.get(s) : s; }
+function _snapObjects(){
+  return project.objects.map(o=>{
+    const c={};
+    for(const k in o){ if(k[0]==="_") continue;
+      c[k] = (k==="srcA"||k==="srcB"||k==="src") ? _tokenize(o[k]) : o[k];
+    }
+    return c;
   });
 }
-function pushHistory(){ _undo.push(_snap()); if(_undo.length>80) _undo.shift(); _redo.length=0; }
-function _restore(json){
-  const s=JSON.parse(json);
-  project.duration = s.duration;
-  project.objects = s.objects;
+function _snap(){ return JSON.stringify({duration:project.duration, objects:_snapObjects(), sel:selectedId}); }
+window.pushHistory=function(){
+  _hist.push(_snap()); if(_hist.length>_HMAX) _hist.shift(); _redo.length=0;
+};
+function _restore(s){
+  const d=JSON.parse(s);
+  project.duration=d.duration;
+  project.objects=(d.objects||[]).map(o=>{ // トークンを実URLへ戻す
+    if(o.srcA!=null) o.srcA=_detok(o.srcA);
+    if(o.srcB!=null) o.srcB=_detok(o.srcB);
+    if(o.src!=null)  o.src =_detok(o.src);
+    return o;
+  });
+  // morph の画像参照は再生成が必要（_img* は落ちている）
+  selectedId = getObj(d.sel)? d.sel : null;
+  selectedKf=null;
   uid = project.objects.reduce((m,o)=>Math.max(m,o.id),0)+1;
-  selectedId = project.objects.some(o=>o.id===s.sel) ? s.sel : null;
-  selectedKf = null;
-  currentTime = Math.min(s.t||0, project.duration);
-  document.body.classList.toggle("has-sel", selectedId!=null);
   document.querySelectorAll(".dur button").forEach(x=>x.classList.toggle("on",+x.dataset.dur===project.duration));
   document.getElementById("tcTotal").textContent=(project.duration/1000).toFixed(2);
+  document.body.classList.toggle("has-sel", !!selectedId);
   buildStage(); renderTimeline(); renderInspector(); render();
 }
-function undoHist(){ if(!_undo.length){ toast("これ以上戻せません"); return; } _redo.push(_snap()); _restore(_undo.pop()); toast("元に戻した"); }
-function redoHist(){ if(!_redo.length){ toast("やり直す操作がありません"); return; } _undo.push(_snap()); _restore(_redo.pop()); toast("やり直した"); }
-window.pushHistory=pushHistory; window.undoHist=undoHist; window.redoHist=redoHist;
+window.undoHist=function(){
+  if(!_hist.length){ toast("これ以上戻せないよ"); return; }
+  _redo.push(_snap()); _restore(_hist.pop()); toast("元に戻した");
+};
+window.redoHist=function(){
+  if(!_redo.length){ toast("やり直せるものが無いよ"); return; }
+  _hist.push(_snap()); _restore(_redo.pop()); toast("やり直した");
+};
 
-/* ---- onion skin ---- */
+/* ---- オニオンスキン（前後のポーズを薄く重ねる） ---- */
 let onionOn=false;
-let _ghosts=[];
+const onionGhosts=[];
+function clearOnion(){ onionGhosts.forEach(g=>g.remove()); onionGhosts.length=0; }
 function renderOnion(){
-  _ghosts.forEach(g=>g.remove()); _ghosts=[];
-  if(!onionOn || playing) return;
+  clearOnion();
+  if(!onionOn || !selectedId) return;
   const obj=getObj(selectedId); if(!obj || obj.keys.length<2) return;
+  // 前=コッパー / 次=グレー
+  const ghosts=[ {dt:-1, col:"#E2674C"}, {dt:+1, col:"#8A9099"} ];
+  // 現在時刻の前後キーを探す
   const times=obj.keys.map(k=>k.t).sort((a,b)=>a-b);
-  const prev=times.filter(t=>t < currentTime-1).pop();
-  const next=times.find(t=>t > currentTime+1);
-  [["#FF5C2B",prev],["#8A9099",next]].forEach(([col,t])=>{
+  const prev=[...times].reverse().find(t=>t<currentTime-1);
+  const next=times.find(t=>t>currentTime+1);
+  [[prev,"#E2674C"],[next,"#8A9099"]].forEach(([t,col])=>{
     if(t==null) return;
-    const pose=poseAt(obj,t);
+    const p=poseAt(obj,t);
     const g=document.createElement("div");
-    g.className="obj onion-ghost";
-    g.style.width=obj.w+"px"; g.style.height=obj.h+"px";
+    g.className="onion-ghost";
     g.style.setProperty("--gc",col);
-    g.innerHTML=shapeMarkup(obj);
-    g.style.left=pose.x+"px"; g.style.top=pose.y+"px";
-    g.style.transform=`translate(-50%,-50%) rotate(${pose.rotation}deg) scale(${pose.scale})`;
-    g.style.opacity=Math.min(0.4, (pose.opacity!=null?pose.opacity:1)*0.4);
-    stage.insertBefore(g, stage.firstChild);
-    if(obj.type==="morph"){
-      const cv=g.querySelector("canvas");
-      if(cv){ loadMorphImgs(obj); renderMorph(cv.getContext("2d"), Math.round(obj.w), Math.round(obj.h), obj._imgA, obj._imgB, obj.natA, obj.natB, obj.points, obj.tris, pose.morph||0); }
-    }
-    _ghosts.push(g);
+    g.style.width=obj.w+"px"; g.style.height=obj.h+"px";
+    g.style.left=p.x+"px"; g.style.top=p.y+"px";
+    g.style.transform=`translate(-50%,-50%) rotate(${p.rotation}deg) scale(${p.scale})`;
+    g.innerHTML = (obj.type==="morph")
+      ? `<div style="width:100%;height:100%;background:${col};opacity:.5;border-radius:8px"></div>`
+      : shapeMarkup(obj).replace('class="body"','');
+    stage.appendChild(g); onionGhosts.push(g);
   });
 }
 document.getElementById("onionBtn").addEventListener("click",e=>{
-  onionOn=!onionOn;
-  e.currentTarget.classList.toggle("on",onionOn);
-  toast(onionOn ? "オニオンスキンON：前後のポーズを表示" : "オニオンスキンOFF");
+  onionOn=!onionOn; e.currentTarget.classList.toggle("on",onionOn);
+  toast(onionOn?"オニオンON：前後のポーズを薄く表示":"オニオンOFF");
   render();
 });
 </script>
@@ -1820,208 +1945,171 @@ document.getElementById("onionBtn").addEventListener("click",e=>{
 <script>
 "use strict";
 /* =========================================================
-   Export: 透明背景の GIF / PNG連番(zip)
-   各オブジェクトを canvas に直接ラスタライズ（DOMは焼かない）
+   D. 書き出し：透明背景の GIF / PNG連番(zip) / HTML
    ========================================================= */
+let _xmFmt="gif", _xmFps=24;
+const exportModal=document.getElementById("exportModal");
+const xmNote=document.getElementById("xmNote"), xmProg=document.getElementById("xmProg"),
+      xmBar=document.getElementById("xmBar"), xmProgT=document.getElementById("xmProgT"),
+      xmGo=document.getElementById("xmGo");
 
-const STAR_PTS=[[50,0],[61,35],[98,35],[68,57],[79,91],[50,70],[21,91],[32,57],[2,35],[39,35]];
-const TRI_PTS=[[50,0],[100,100],[0,100]];
+function xmUpdateNote(){
+  xmNote.textContent = _xmFmt==="gif"
+    ? "GIF：軽くて貼りやすい。透明は1bit（フチが少しジャギる）＋真っ黒は抜けることがある。黒い絵・絵文字を使うならPNG連番が安全◎。"
+    : "PNG連番(zip)：1フレームずつ高画質・完全透明で書き出し。動画編集アプリに読み込んで使える。";
+}
+document.getElementById("xmFmt").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  _xmFmt=b.dataset.fmt;
+  e.currentTarget.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
+  xmUpdateNote();
+});
+document.getElementById("xmFps").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  _xmFps=+b.dataset.fps;
+  e.currentTarget.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
+});
+function openExportModal(){ _xmFmt="gif"; _xmFps=24; xmUpdateNote();
+  xmProg.classList.remove("show"); xmBar.style.width="0%"; xmProgT.textContent="0%"; xmGo.disabled=false;
+  document.getElementById("xmFmt").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.fmt==="gif"));
+  document.getElementById("xmFps").querySelectorAll("button").forEach(x=>x.classList.toggle("on",+x.dataset.fps===24));
+  exportModal.classList.add("open");
+}
+document.getElementById("xmCancel").addEventListener("click",()=>exportModal.classList.remove("open"));
+document.getElementById("xmHtml").addEventListener("click",()=>{
+  const html=buildStandalone();
+  download("10sec.html", html, "text/html"); toast("HTMLで書き出したよ");
+});
+document.getElementById("xmGo").addEventListener("click",()=>{
+  if(_xmFmt==="gif") exportGIF(); else exportPNGZip();
+});
 
-function _roundRect(ctx,x,y,w,h,r){
-  r=Math.min(r,Math.abs(w)/2,Math.abs(h)/2);
-  ctx.beginPath();
-  ctx.moveTo(x+r,y);
-  ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
-  ctx.arcTo(x,y+h,x,y,r);     ctx.arcTo(x,y,x+w,y,r);
-  ctx.closePath();
+/* ---- 1フレームを透明キャンバスへ描画 ---- */
+const _expImgCache=new Map();
+function _ensureImg(src){
+  return new Promise(res=>{
+    if(!src){ res(null); return; }
+    const im=new Image();
+    const done=()=>res(im);
+    if(im.decode){
+      im.src=src;
+      im.decode().then(done).catch(done);
+    } else {
+      im.onload=done; im.onerror=done; im.src=src;
+    }
+  });
 }
-function _poly(ctx,pts,w,h){
-  ctx.beginPath();
-  pts.forEach(([px,py],i)=>{ const X=(px/100)*w-w/2, Y=(py/100)*h-h/2; i?ctx.lineTo(X,Y):ctx.moveTo(X,Y); });
-  ctx.closePath();
+function preloadExportAssets(cb){
+  // 全画像（morph の A/B ＋ image の src）を decode 完了まで待ってから書き出す
+  const jobs=[];
+  project.objects.forEach(o=>{
+    if(o.type==="morph"){
+      jobs.push(_ensureImg(o.srcA).then(im=>{ if(im) o._imgA=im; }));
+      jobs.push(_ensureImg(o.srcB).then(im=>{ if(im) o._imgB=im; }));
+    } else if(o.type==="image"){
+      jobs.push(_ensureImg(o.src).then(im=>{ if(im) _expImgCache.set(o.id, im); }));
+    }
+  });
+  Promise.all(jobs).then(()=>cb());
 }
-function _drawText(ctx,obj,col){
-  const fs=obj.fontSize||40;
-  ctx.font=`800 ${fs}px ${FONTS[obj.font||'rounded']}`;
-  ctx.fillStyle=col; ctx.textAlign="center"; ctx.textBaseline="middle";
-  const lines=String(obj.text).split("\n");
-  if(obj.vertical){
-    // 縦書き（vertical-rl）：1行＝1列、列は右から左へ
-    const charH=fs*1.05, colW=fs*1.2, x0=(lines.length-1)*colW/2;
-    lines.forEach((ln,ci)=>{
-      const chars=[...ln], y0=-(chars.length-1)*charH/2, x=x0-ci*colW;
-      chars.forEach((ch,ri)=>ctx.fillText(ch, x, y0+ri*charH));
-    });
-  } else {
-    const lh=fs*1.15, y0=-(lines.length-1)*lh/2;
-    lines.forEach((ln,i)=>ctx.fillText(ln,0,y0+i*lh));
-  }
-}
-let _morphOff=null;
-function _drawMorph(ctx,obj,p,w,h){
-  if(!_morphOff) _morphOff=document.createElement("canvas");
-  const W=Math.max(1,Math.round(w)), H=Math.max(1,Math.round(h));
-  _morphOff.width=W; _morphOff.height=H;
-  loadMorphImgs(obj);
-  renderMorph(_morphOff.getContext("2d"), W, H, obj._imgA, obj._imgB, obj.natA, obj.natB, obj.points, obj.tris, p.morph||0);
-  ctx.drawImage(_morphOff, -w/2, -h/2, w, h);
-}
-// ctx は既にステージ座標系（base transform で出力解像度に拡大済み）で渡される
-function drawObjectToCtx(ctx, obj, p){
+function drawObjectToCtx(ctx,obj,p){
   ctx.save();
-  ctx.globalAlpha=Math.max(0,Math.min(1, p.opacity!=null?p.opacity:1));
   ctx.translate(p.x, p.y);
-  ctx.rotate((p.rotation||0)*Math.PI/180);
-  ctx.scale(p.scale||1, p.scale||1);
+  ctx.rotate(p.rotation*Math.PI/180);
+  ctx.scale(p.scale, p.scale);
+  ctx.globalAlpha=p.opacity;
   const w=obj.w, h=obj.h, col=p.color||obj.color;
-  switch(obj.type){
-    case "rect":     ctx.fillStyle=col; _roundRect(ctx,-w/2,-h/2,w,h,10); ctx.fill(); break;
-    case "circle":   ctx.fillStyle=col; ctx.beginPath(); ctx.ellipse(0,0,w/2,h/2,0,0,Math.PI*2); ctx.fill(); break;
-    case "triangle": ctx.fillStyle=col; _poly(ctx,TRI_PTS,w,h); ctx.fill(); break;
-    case "star":     ctx.fillStyle=col; _poly(ctx,STAR_PTS,w,h); ctx.fill(); break;
-    case "text":     _drawText(ctx,obj,col); break;
-    case "emoji":    ctx.font='80px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
-                     ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(obj.text,0,0); break;
-    case "image":    if(obj._expImg && obj._expImg.complete && obj._expImg.naturalWidth) ctx.drawImage(obj._expImg,-w/2,-h/2,w,h); break;
-    case "morph":    _drawMorph(ctx,obj,p,w,h); break;
+  if(obj.type==="morph"){
+    const cv=document.createElement("canvas"); cv.width=Math.round(w); cv.height=Math.round(h);
+    if(obj._imgA&&obj._imgB) renderMorph(cv.getContext("2d"),cv.width,cv.height,obj._imgA,obj._imgB,obj.natA,obj.natB,obj.points,obj.tris,p.morph||0);
+    ctx.drawImage(cv,-w/2,-h/2,w,h);
+  } else if(obj.type==="image"){
+    let im=_expImgCache.get(obj.id);
+    if(!im){ im=new Image(); im.src=obj.src; _expImgCache.set(obj.id,im); }
+    if(im.complete&&im.naturalWidth){
+      const k=Math.min(w/im.naturalWidth, h/im.naturalHeight);
+      const dw=im.naturalWidth*k, dh=im.naturalHeight*k;
+      ctx.drawImage(im,-dw/2,-dh/2,dw,dh);
+    }
+  } else if(obj.type==="rect"){
+    ctx.fillStyle=col; _roundRect(ctx,-w/2,-h/2,w,h,10); ctx.fill();
+  } else if(obj.type==="circle"){
+    ctx.fillStyle=col; ctx.beginPath(); ctx.ellipse(0,0,w/2,h/2,0,0,Math.PI*2); ctx.fill();
+  } else if(obj.type==="triangle"){
+    ctx.fillStyle=col; _poly(ctx,[[0,-h/2],[w/2,h/2],[-w/2,h/2]]); ctx.fill();
+  } else if(obj.type==="star"){
+    ctx.fillStyle=col; _star(ctx,w/2,h/2); ctx.fill();
+  } else if(obj.type==="text"){
+    ctx.fillStyle=col; ctx.font=`800 ${obj.fontSize||40}px ${FONTS[obj.font||'rounded']}`;
+    ctx.textAlign="center"; ctx.textBaseline="middle";
+    (obj.text||"").split("\n").forEach((ln,i,arr)=>{
+      ctx.fillText(ln, 0, (i-(arr.length-1)/2)*(obj.fontSize||40)*1.15);
+    });
+  } else if(obj.type==="emoji"){
+    ctx.font="80px system-ui"; ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText(obj.text||"", 0, 0);
   }
   ctx.restore();
 }
-// 透明背景で1フレーム描画。S=出力解像度倍率
-function renderFrame(canvas, S, t){
-  const ctx=canvas.getContext("2d");
-  ctx.setTransform(1,0,0,1,0,0);
-  ctx.clearRect(0,0,canvas.width,canvas.height);   // 透明
-  ctx.setTransform(S,0,0,S,0,0);                    // 以降はステージ座標で描く
-  project.objects.forEach(obj=>drawObjectToCtx(ctx, obj, poseAt(obj,t)));
-  ctx.setTransform(1,0,0,1,0,0);
+function _roundRect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2);
+  ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function _poly(ctx,pts){ ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.closePath(); }
+function _star(ctx,rx,ry){ const pts=[]; for(let i=0;i<10;i++){ const a=-Math.PI/2+i*Math.PI/5; const r=(i%2?0.45:1); pts.push([Math.cos(a)*rx*r,Math.sin(a)*ry*r]); } _poly(ctx,pts); }
+
+function renderFrame(ctx, t){
+  ctx.clearRect(0,0,STAGE_W,STAGE_H);
+  project.objects.forEach(obj=>{ drawObjectToCtx(ctx,obj,poseAt(obj,t)); });
 }
 
-/* 画像・モーフ画像・フォントを書き出し前に確実に読み込む */
-function preloadExportAssets(){
-  const ps=[];
-  project.objects.forEach(obj=>{
-    if(obj.type==="image" && obj.src){
-      if(!obj._expImg) obj._expImg=new Image();
-      if(obj._expImg.src!==obj.src || !obj._expImg.complete){
-        ps.push(new Promise(r=>{ obj._expImg.onload=r; obj._expImg.onerror=r; obj._expImg.src=obj.src; }));
-      }
-    }
-    if(obj.type==="morph"){
-      loadMorphImgs(obj);
-      [obj._imgA,obj._imgB].forEach(im=>{ if(im && !(im.complete && im.naturalWidth)) ps.push(new Promise(r=>{ im.onload=r; im.onerror=r; })); });
-    }
+/* ---- GIF ---- */
+function gifWorkerURL(){
+  // gif.js のワーカを CDN から blob 化（同一URL）
+  return "https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js";
+}
+function exportGIF(){
+  if(typeof GIF==="undefined"){ toast("GIF ライブラリが読めてない…通信を確認してね"); return; }
+  xmProg.classList.add("show"); xmGo.disabled=true; xmBar.style.width="0%"; xmProgT.textContent="0%";
+  preloadExportAssets(()=>{
+    const fps=_xmFps, total=project.duration, n=Math.max(1,Math.round(total/1000*fps)), delay=Math.round(1000/fps);
+    const cv=document.createElement("canvas"); cv.width=STAGE_W; cv.height=STAGE_H;
+    const ctx=cv.getContext("2d");
+    const gif=new GIF({workers:2, quality:10, width:STAGE_W, height:STAGE_H, transparent:0x00000000, workerScript:gifWorkerURL()});
+    for(let i=0;i<n;i++){ renderFrame(ctx, i/n*total); gif.addFrame(ctx,{copy:true,delay}); }
+    gif.on("progress",pp=>{ const v=Math.round(pp*100); xmBar.style.width=v+"%"; xmProgT.textContent=v+"%"; });
+    gif.on("finished",blob=>{
+      const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="10sec.gif"; a.click();
+      setTimeout(()=>URL.revokeObjectURL(url),800);
+      xmGo.disabled=false; exportModal.classList.remove("open"); toast("GIFを書き出したよ");
+    });
+    gif.render();
   });
-  if(document.fonts && document.fonts.ready) ps.push(document.fonts.ready);
-  return Promise.all(ps);
 }
 
-function _downloadBlob(name,blob){
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a"); a.href=url; a.download=name; a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),1500);
+/* ---- PNG連番 (zip) ---- */
+function exportPNGZip(){
+  if(typeof JSZip==="undefined"){ toast("zip ライブラリが読めてない…通信を確認してね"); return; }
+  xmProg.classList.add("show"); xmGo.disabled=true; xmBar.style.width="0%"; xmProgT.textContent="0%";
+  preloadExportAssets(async ()=>{
+    const fps=_xmFps, total=project.duration, n=Math.max(1,Math.round(total/1000*fps));
+    const cv=document.createElement("canvas"); cv.width=STAGE_W; cv.height=STAGE_H;
+    const ctx=cv.getContext("2d");
+    const zip=new JSZip();
+    for(let i=0;i<n;i++){
+      renderFrame(ctx, i/n*total);
+      const blob=await new Promise(r=>cv.toBlob(r,"image/png"));
+      const buf=await blob.arrayBuffer();
+      zip.file(`frame_${String(i).padStart(4,"0")}.png`, buf);
+      const v=Math.round((i+1)/n*100); xmBar.style.width=v+"%"; xmProgT.textContent=v+"%";
+      await new Promise(r=>setTimeout(r,0));
+    }
+    const out=await zip.generateAsync({type:"blob"});
+    const url=URL.createObjectURL(out); const a=document.createElement("a"); a.href=url; a.download="10sec_png.zip"; a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),800);
+    xmGo.disabled=false; exportModal.classList.remove("open"); toast("PNG連番(zip)を書き出したよ");
+  });
 }
-const _nextTick=()=>new Promise(r=>setTimeout(r,0));
-
-/* ---- GIF（1bit透明・マゼンタをキーカラーに）---- */
-// gif.js の worker は別オリジン(cdnjs)から直接 Worker 化できない（SecurityError）。
-// 一度 fetch して Blob URL 化し、同一オリジン扱いにして渡す。
-let _gifWorkerURL=null;
-async function gifWorkerURL(){
-  if(_gifWorkerURL) return _gifWorkerURL;
-  const res=await fetch("https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js");
-  if(!res.ok) throw new Error("worker fetch failed");
-  const code=await res.text();
-  _gifWorkerURL=URL.createObjectURL(new Blob([code],{type:"application/javascript"}));
-  return _gifWorkerURL;
-}
-async function exportGIF(fps){
-  if(typeof GIF==="undefined"){ toast("GIFライブラリを読めなかった（ネット接続が必要）"); xmReset(); return; }
-  let workerScript;
-  try{ workerScript=await gifWorkerURL(); }
-  catch(e){ console.error(e); toast("GIFワーカーを読めなかった（ネット接続が必要）"); xmReset(); return; }
-  await preloadExportAssets();
-  const S=1, W=STAGE_W*S, H=STAGE_H*S;                 // GIFは256色なので等倍で十分
-  const frames=Math.max(2, Math.round(project.duration/1000*fps)), delay=Math.round(1000/fps);
-  const KEY=0xFF00FF;
-  const gif=new GIF({workers:2, quality:10, width:W, height:H, transparent:KEY, dither:false, workerScript});
-  const fc=document.createElement("canvas"); fc.width=W; fc.height=H;
-  const mc=document.createElement("canvas"); mc.width=W; mc.height=H; const mctx=mc.getContext("2d");
-  for(let i=0;i<frames;i++){
-    renderFrame(fc, S, (i/(frames-1))*project.duration);
-    // 透明部分をキーカラーで塗りつぶしてから addFrame（GIFは1bit透明のため）
-    mctx.setTransform(1,0,0,1,0,0); mctx.fillStyle="#FF00FF"; mctx.fillRect(0,0,W,H); mctx.drawImage(fc,0,0);
-    gif.addFrame(mctx, {copy:true, delay});
-    xmSetProg((i+1)/frames*0.5);
-    if(i%4===0) await _nextTick();
-  }
-  gif.on("progress",p=>xmSetProg(0.5+p*0.5));
-  gif.on("finished",blob=>{ _downloadBlob("10sec.gif",blob); xmFinish("GIFを書き出しました"); });
-  gif.render();
-}
-
-/* ---- PNG連番（32bit透明）を zip で ---- */
-async function exportPNGZip(fps){
-  if(typeof JSZip==="undefined"){ toast("zipライブラリを読めなかった（ネット接続が必要）"); xmReset(); return; }
-  await preloadExportAssets();
-  const S=2, W=STAGE_W*S, H=STAGE_H*S;                 // PNGは高解像度で
-  const frames=Math.max(2, Math.round(project.duration/1000*fps));
-  const zip=new JSZip(), dir=zip.folder("10sec_frames");
-  const c=document.createElement("canvas"); c.width=W; c.height=H;
-  for(let i=0;i<frames;i++){
-    renderFrame(c, S, (i/(frames-1))*project.duration);
-    const b64=c.toDataURL("image/png").split(",")[1];
-    dir.file(`frame_${String(i).padStart(4,"0")}.png`, b64, {base64:true});
-    xmSetProg((i+1)/frames*0.75);
-    if(i%2===0) await _nextTick();
-  }
-  const blob=await zip.generateAsync({type:"blob"}, m=>xmSetProg(0.75+m.percent/100*0.25));
-  _downloadBlob("10sec-frames.zip",blob); xmFinish("PNG連番(zip)を書き出しました");
-}
-
-/* ---- chooser UI ---- */
-const xmModal=document.getElementById("exportModal");
-const xmFmt=document.getElementById("xmFmt"), xmFps=document.getElementById("xmFps");
-const xmGo=document.getElementById("xmGo"), xmProg=document.getElementById("xmProg");
-const xmBar=document.getElementById("xmBar"), xmProgT=document.getElementById("xmProgT");
-const xmNote=document.getElementById("xmNote");
-let xmRunning=false;
-
-function xmCurrent(group){ return group.querySelector("button.on"); }
-function xmSeg(group){ group.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b||xmRunning)return;
-  group.querySelectorAll("button").forEach(x=>x.classList.remove("on")); b.classList.add("on"); xmUpdateNote(); }); }
-xmSeg(xmFmt); xmSeg(xmFps);
-
-function xmUpdateNote(){
-  const fmt=xmCurrent(xmFmt).dataset.fmt;
-  const frames=Math.max(2,Math.round(project.duration/1000*(+xmCurrent(xmFps).dataset.fps)));
-  xmNote.textContent = fmt==="gif"
-    ? `背景は透明（GIFは1bit透明なのでフチが多少ガビります）。約${frames}フレーム / ${(project.duration/1000).toFixed(1)}秒。`
-    : `背景は完全な透明（32bit）。${STAGE_W*2}×${STAGE_H*2}px の連番PNGを約${frames}枚、zipにまとめます。`;
-}
-function openExportModal(){ xmReset(); xmUpdateNote(); xmModal.classList.add("open"); }
-function closeExportModal(){ if(xmRunning) return; xmModal.classList.remove("open"); }
-function xmReset(){ xmRunning=false; xmProg.classList.remove("show"); xmBar.style.width="0%"; xmProgT.textContent="0%";
-  xmGo.disabled=false; xmGo.textContent="書き出す"; }
-function xmSetProg(f){ const pct=Math.round(Math.max(0,Math.min(1,f))*100); xmBar.style.width=pct+"%"; xmProgT.textContent=pct+"%"; }
-function xmFinish(msg){ xmRunning=false; xmGo.disabled=false; xmGo.textContent="書き出す"; toast(msg); closeExportModalForce(); }
-function closeExportModalForce(){ xmModal.classList.remove("open"); xmProg.classList.remove("show"); }
-
-xmGo.addEventListener("click",async ()=>{
-  if(xmRunning) return;
-  xmRunning=true; xmGo.disabled=true; xmGo.textContent="書き出し中…"; xmProg.classList.add("show"); xmSetProg(0);
-  const fmt=xmCurrent(xmFmt).dataset.fmt, fps=+xmCurrent(xmFps).dataset.fps;
-  try{ if(fmt==="gif") await exportGIF(fps); else await exportPNGZip(fps); }
-  catch(err){ console.error(err); toast("書き出しに失敗しました"); xmReset(); }
-});
-document.getElementById("xmCancel").addEventListener("click",closeExportModal);
-document.getElementById("xmHtml").addEventListener("click",()=>{
-  if(xmRunning) return;
-  const html=buildStandalone(); _downloadBlob("10sec-animation.html", new Blob([html],{type:"text/html"}));
-  toast("HTMLを書き出しました"); closeExportModal();
-});
-xmModal.addEventListener("click",e=>{ if(e.target===xmModal) closeExportModal(); });
-window.openExportModal=openExportModal;
 </script>
+
 </body>
 </html>
