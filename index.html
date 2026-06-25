@@ -88,6 +88,8 @@ input,select{font-family:inherit}
   display:grid;place-items:center; transition:transform .12s, background .14s, color .14s;}
 .tbtn:hover{background:var(--elevate); color:var(--ink)}
 .tbtn:active{transform:scale(.92)}
+.tbtn:disabled{opacity:.32; cursor:default; pointer-events:none}
+.tbar-sep{width:1px; height:22px; background:var(--line); flex:0 0 auto; margin:0 1px}
 .tbtn.play{width:46px;height:46px;border-radius:13px;color:#fff;
   background:linear-gradient(180deg,var(--accent-bright),var(--accent));
   box-shadow:0 0 0 1px rgba(0,0,0,.25), 0 1px 0 rgba(255,255,255,.28) inset,
@@ -153,6 +155,10 @@ body.dragging-obj .app{overflow:hidden !important; touch-action:none}
 /* checkbox row in inspector */
 .chk{display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink); cursor:pointer; padding:2px 0; user-select:none}
 .chk input{width:16px; height:16px; accent-color:var(--accent); cursor:pointer}
+/* crisp 1px canvas boundary — visible on dark / checker backgrounds (not affected by stage scale) */
+.stage-frame{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  border:1px solid rgba(178,178,186,.32); border-radius:10px; box-sizing:border-box;
+  pointer-events:none; z-index:4; display:none}
 /* stage background switch (紙/黒/透過) */
 .stage-bg-switch{position:absolute; left:10px; top:10px; z-index:6; display:flex; gap:2px;
   background:rgba(18,19,22,.72); border:1px solid var(--line); border-radius:9px; padding:2px; backdrop-filter:blur(6px)}
@@ -538,6 +544,13 @@ body.is-empty #stagePrompt{display:flex}
       <button class="tbtn" id="loopBtn" title="くり返し再生">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
       </button>
+      <span class="tbar-sep"></span>
+      <button class="tbtn" id="undoBtn" title="元に戻す（⌘/Ctrl+Z）" aria-label="元に戻す" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 010 10h-4"/></svg>
+      </button>
+      <button class="tbtn" id="redoBtn" title="やり直す（⌘/Ctrl+Shift+Z）" aria-label="やり直す" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M20 9H9a5 5 0 000 10h4"/></svg>
+      </button>
     </div>
 
     <div class="tc mono"><b id="tcNow">0.00</b><span> / <span id="tcTotal">5.00</span>s</span></div>
@@ -586,6 +599,7 @@ body.is-empty #stagePrompt{display:flex}
     <div class="stagewrap">
       <div class="stage-fit" id="stageFit">
         <div class="stage" id="stage"></div>
+        <div class="stage-frame" id="stageFrame"></div>
         <button id="stagePrompt" type="button">
           <span class="sp-ic">🖼️</span>
           <span class="sp-main">タップして画像を読み込む</span>
@@ -719,6 +733,16 @@ body.is-empty #stagePrompt{display:flex}
 </div>
 
 <div id="sheetBackdrop"></div>
+<div id="confirmModal" class="xm">
+  <div class="xm-card" style="max-width:380px">
+    <div class="xm-title" id="cfTitle">確認</div>
+    <p class="xm-note" id="cfMsg" style="min-height:auto"></p>
+    <div class="xm-actions">
+      <button class="xm-btn cancel" id="cfNo" style="flex:0 0 auto">キャンセル</button>
+      <button class="xm-btn primary" id="cfYes">OK</button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -863,6 +887,8 @@ function fitStage(){
   if(aw<=0 || ah<=0) return;                       // レイアウト未確定のときは触らない
   stageScale = Math.max(0.05, Math.min(aw/STAGE_W, ah/STAGE_H));
   stage.style.transform = `translate(-50%,-50%) scale(${stageScale})`;  // 常に中央固定
+  const sf=document.getElementById("stageFrame");
+  if(sf){ sf.style.width=(STAGE_W*stageScale)+"px"; sf.style.height=(STAGE_H*stageScale)+"px"; sf.style.display="block"; }
 }
 
 function shapeMarkup(obj){
@@ -994,7 +1020,31 @@ function commitPose(obj, pose){
 
 /* ---------- motion presets ---------- */
 // 今の時刻のポーズを「定位置」として、よくある動きのキーフレームを自動生成する
+/* ---- generic confirm dialog ---- */
+let _cfYes=null;
+function confirmAction(msg, yesLabel, onYes){
+  const m=document.getElementById("confirmModal");
+  document.getElementById("cfMsg").textContent=msg;
+  document.getElementById("cfYes").textContent=yesLabel||"OK";
+  _cfYes=onYes; m.classList.add("open");
+}
+(function(){
+  const m=document.getElementById("confirmModal"); if(!m) return;
+  const close=()=>{ m.classList.remove("open"); _cfYes=null; };
+  document.getElementById("cfNo").addEventListener("click",close);
+  document.getElementById("cfYes").addEventListener("click",()=>{ const f=_cfYes; close(); if(f) f(); });
+  m.addEventListener("click",e=>{ if(e.target===m) close(); });
+})();
+
 function applyMotionPreset(obj, kind){
+  // 既にアニメ（キー2個以上）が付いてたら、いきなり消さず確認を挟む
+  if(obj.keys && obj.keys.length>1){
+    confirmAction("いまのキーフレームを、このプリセットの動きに置き換えるで。ええ？", "置き換える", ()=>_doMotionPreset(obj,kind));
+  } else {
+    _doMotionPreset(obj,kind);
+  }
+}
+function _doMotionPreset(obj, kind){
   window.pushHistory&&window.pushHistory();
   const d=project.duration;
   const home=poseAt(obj,currentTime);            // 安静時のポーズ
@@ -1098,7 +1148,7 @@ function renderInspector(){
       <input class="txtin" id="p_char" value="${escapeAttr(obj.pChar||'✦')}" maxlength="3"></div>`:""}
     <div class="field"><label>いろ</label>
       <div class="swatches" id="p_colors">
-        ${PARTICLE_COLORS.map(c=>`<div class="sw ${c.toLowerCase()===(obj.color||'').toLowerCase()?'on':''}" data-c="${c}" style="background:${c}"></div>`).join("")}
+        ${PARTICLE_COLORS.map(c=>`<div class="sw ${c.toLowerCase()===((p.color||obj.color)||'').toLowerCase()?'on':''}" data-c="${c}" style="background:${c}"></div>`).join("")}
       </div></div>
     <label class="chk"><input type="checkbox" id="p_glow" ${obj.pGlow?'checked':''}> ふんわり光らせる（グロー）</label>
     <label class="chk"><input type="checkbox" id="p_multi" ${obj.pMulti?'checked':''}> カラフル（複数色ミックス）</label>
@@ -1205,8 +1255,10 @@ function renderInspector(){
       window.pushHistory&&window.pushHistory(); obj.pShape=b.dataset.s; renderInspector(); render(); });
     const pc=q("#p_char"); if(pc) pc.addEventListener("input",e=>{ obj.pChar=e.target.value||"✦"; render(); });
     const pcl=q("#p_colors"); if(pcl) pcl.addEventListener("click",e=>{ const sw=e.target.closest(".sw"); if(!sw)return;
-      window.pushHistory&&window.pushHistory(); obj.color=sw.dataset.c; obj.base.color=obj.color;
-      pcl.querySelectorAll(".sw").forEach(s=>s.classList.toggle("on",s===sw)); render(); });
+      const c=sw.dataset.c; obj.color=c; obj.base.color=c;
+      const pose=poseAt(obj,currentTime); pose.color=c;       // 自動記録ONなら今の時刻に色キーが入る＝色を時間変化できる
+      pcl.querySelectorAll(".sw").forEach(s=>s.classList.toggle("on",s===sw));
+      commitPose(obj, pose); });
     const pg=q("#p_glow"); if(pg) pg.addEventListener("change",e=>{ window.pushHistory&&window.pushHistory(); obj.pGlow=e.target.checked; render(); });
     const pm=q("#p_multi"); if(pm) pm.addEventListener("change",e=>{ window.pushHistory&&window.pushHistory(); obj.pMulti=e.target.checked; render(); });
     bindObjSlider("#p_rate","pRate","/秒"); bindObjSlider("#p_life","pLife","秒",v=>v/10,v=>(v/10).toFixed(1));
@@ -1984,8 +2036,13 @@ function _snapObjects(){
   });
 }
 function _snap(){ return JSON.stringify({duration:project.duration, objects:_snapObjects(), sel:selectedId}); }
+function refreshHistButtons(){
+  const u=document.getElementById("undoBtn"), r=document.getElementById("redoBtn");
+  if(u) u.disabled = _hist.length===0;
+  if(r) r.disabled = _redo.length===0;
+}
 window.pushHistory=function(){
-  _hist.push(_snap()); if(_hist.length>_HMAX) _hist.shift(); _redo.length=0;
+  _hist.push(_snap()); if(_hist.length>_HMAX) _hist.shift(); _redo.length=0; refreshHistButtons();
 };
 function _restore(s){
   const d=JSON.parse(s);
@@ -2007,12 +2064,16 @@ function _restore(s){
 }
 window.undoHist=function(){
   if(!_hist.length){ toast("これ以上戻せないよ"); return; }
-  _redo.push(_snap()); _restore(_hist.pop()); toast("元に戻した");
+  _redo.push(_snap()); _restore(_hist.pop()); refreshHistButtons(); toast("元に戻した");
 };
 window.redoHist=function(){
   if(!_redo.length){ toast("やり直せるものが無いよ"); return; }
-  _hist.push(_snap()); _restore(_redo.pop()); toast("やり直した");
+  _hist.push(_snap()); _restore(_redo.pop()); refreshHistButtons(); toast("やり直した");
 };
+// toolbar の Undo/Redo ボタン
+document.getElementById("undoBtn")?.addEventListener("click",()=>window.undoHist());
+document.getElementById("redoBtn")?.addEventListener("click",()=>window.redoHist());
+refreshHistButtons();
 
 /* ---- オニオンスキン（前後のポーズを薄く重ねる） ---- */
 let onionOn=false;
@@ -2311,6 +2372,7 @@ function drawParticles(ctx, obj, tMs){
     const frac=tau/life;
     const ep=poseAt(obj, ts*1000);
     const erot=ep.rotation||0, esc=ep.scale||1, eop=(ep.opacity!=null?ep.opacity:1);
+    const baseCol = ep.color || col1;   // エミッターのポーズ色＝タイムラインで色変化できる
     const ang=(ang0 + erot + (pRand(seed,i,2)*2-1)*spread) * Math.PI/180;
     const spd=spd0*(1+(pRand(seed,i,3)*2-1)*spdVar)*esc;
     const vx=Math.cos(ang)*spd, vy=Math.sin(ang)*spd;
@@ -2322,7 +2384,7 @@ function drawParticles(ctx, obj, tMs){
     a*=eop; if(a<=0.012) continue;
     let sz=lerp(sizeA,sizeB,frac)*esc; if(sz<=0.25) continue;
     let color = multi ? MULTI_COLORS[Math.floor(pRand(seed,i,5)*MULTI_COLORS.length)%MULTI_COLORS.length]
-                      : (col2 ? lerpColor(col1,col2,frac) : col1);
+                      : (col2 ? lerpColor(baseCol,col2,frac) : baseCol);
     // twinkle：粒ごとに位相をずらしてチカチカ明滅（Red Giant風のきらめき）
     if(twk>0){ const ph=pRand(seed,i,7)*6.283 + T*7.0; const tw=1-twk*(0.5-0.5*Math.sin(ph)); a*=tw; sz*=(0.8+0.2*tw); }
     if(shape==="glint"){
