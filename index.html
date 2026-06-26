@@ -1098,12 +1098,13 @@ body.is-playing .obj .emitter{opacity:0}
 .tick{position:absolute; top:0; height:30px; border-left:1px solid var(--line); font-size:10px; color:var(--faint);
   padding:4px 0 0 4px; box-sizing:border-box; font-family:"DM Mono",monospace}
 .tick.sub{border-color:var(--line2)}
-.lane{height:42px; position:relative; border-bottom:1px solid var(--line2)}
+.lane{height:42px; position:relative; border-bottom:1px solid var(--line2); touch-action:none}
 .lane.sel{background-color:rgba(226,103,76,.06)}
 
 .kf{position:absolute; top:50%; width:14px; height:14px; background:var(--key);
   border:2px solid var(--panel); box-shadow:0 1px 5px rgba(0,0,0,.5);
   transform:translate(-50%,-50%) rotate(45deg); border-radius:3px; cursor:grab; z-index:3;
+  touch-action:none;
   transition:transform .08s}
 .kf:hover{background:var(--key-press)}
 .kf.sel{box-shadow:0 0 0 3px var(--accent-soft2),0 2px 8px rgba(0,0,0,.6)}
@@ -1129,7 +1130,7 @@ body.is-playing .obj .emitter{opacity:0}
 .tween.tw-linear{background:#737884}
 .tween.tw-bounce{background:var(--gold)}
 .kf.sel{transform:translate(-50%,-50%) rotate(45deg) scale(1.28)}
-@media (max-width:880px){ .kf::before{content:""; position:absolute; inset:-12px} }
+@media (max-width:880px){ .kf{width:17px;height:17px} .kf::before{content:""; position:absolute; inset:-14px} }
 .playhead{width:2.5px}
 .playhead .head{width:18px;height:18px}
 
@@ -2326,47 +2327,53 @@ function renderTimeline(){
       lane.appendChild(d);
     });
     obj._pop=null;
+    // レーンのどこを触っても、一番近い◇を掴んでドラッグできる（指で外しにくくする）
+    lane.addEventListener("pointerdown",e=>{
+      if(e.target.classList.contains("kf")) return;   // ◇直撃はそちらで処理
+      if(!obj.keys.length){ selectObject(obj.id); return; }
+      const r=lane.getBoundingClientRect(); const xLocal=e.clientX-r.left;
+      let best=Infinity, nel=null, nk=null;
+      lane.querySelectorAll(".kf").forEach(d=>{ const dd=Math.abs(parseFloat(d.style.left||"0")-xLocal);
+        if(dd<best){ best=dd; nel=d; const tt=+d.dataset.t; nk=obj.keys.find(kk=>Math.abs(kk.t-tt)<1)||null; } });
+      if(nk && best<=44){ e.preventDefault(); beginKfDrag(obj,nk,nel,e); }   // 近い◇を掴む
+      else { selectObject(obj.id); currentTime=Math.round(xToT(xLocal)); updatePlayhead(); render(); renderInspector(); }
+    });
     lanesEl.appendChild(lane);
   });
   updatePlayhead();
 }
 
 function attachKfDrag(obj,k,el){
-  let st=null;
-  el.addEventListener("pointerdown",e=>{
-    e.stopPropagation();
-    el.setPointerCapture(e.pointerId);
-    // ここでは履歴を積まない（クリック=選択だけで undo が汚れるのを防ぐ）。
-    // 実際に動かした初回の pointermove で1回だけ積む。
-    selectedId=obj.id;
-    selectedKf={objId:obj.id,time:k.t};
-    document.body.classList.add("has-sel");
-    st={mx:e.clientX, t0:k.t, pushed:false};
-    lanesEl.querySelectorAll(".kf.sel").forEach(n=>n.classList.remove("sel"));
-    el.classList.add("sel");
-    renderInspector();  // インスペクタは別 DOM ツリーなので作り直してOK
-  });
-  el.addEventListener("pointermove",e=>{
-    if(!st)return;
-    if(!st.pushed){ window.pushHistory&&window.pushHistory(); st.pushed=true; }  // 移動前状態を1回だけ記録
-    const dx=e.clientX-st.mx;
-    const nt=clamp(st.t0 + (dx/trackWidth())*project.duration, 0, project.duration);
-    k.t=Math.round(nt);
-    selectedKf={objId:obj.id,time:k.t};
-    currentTime=k.t;
-    // ドラッグ中はこの◇の位置だけ動かす（タイムラインは作り直さない＝capture 維持）
-    el.style.left=tToX(k.t)+"px";
-    render();           // ステージ・プレイヘッドへ反映
-    renderInspector();  // 「○○秒のポーズ」表示を更新
-  });
-  el.addEventListener("pointerup",e=>{
-    if(!st)return;
-    st=null;
-    obj.keys.sort((a,b)=>a.t-b.t);
-    renderTimeline();   // 確定時にソート結果とトゥイーン帯を正しく描き直す
-    renderInspector();
-  });
+  el.addEventListener("pointerdown",e=>{ e.stopPropagation(); e.preventDefault(); beginKfDrag(obj,k,el,e); });
   el.addEventListener("dblclick",e=>{ e.stopPropagation(); deleteKeyAt(obj,k.t); });
+}
+// 実際のドラッグ。指が小さい◇から外れても追従するよう window で move/up を拾う。
+function beginKfDrag(obj,k,el,e){
+  selectedId=obj.id; selectedKf={objId:obj.id,time:k.t}; document.body.classList.add("has-sel");
+  lanesEl.querySelectorAll(".kf.sel").forEach(n=>n.classList.remove("sel"));
+  if(el) el.classList.add("sel");
+  renderInspector();
+  const startX=e.clientX, t0=k.t; let pushed=false, moved=false;
+  function move(ev){
+    const dx=ev.clientX-startX;
+    if(!moved && Math.abs(dx)<2) return;           // 微小は無視（タップ＝選択だけ）
+    moved=true;
+    if(!pushed){ window.pushHistory&&window.pushHistory(); pushed=true; }  // 動かした初回だけ履歴
+    const nt=clamp(t0 + (dx/trackWidth())*project.duration, 0, project.duration);
+    k.t=Math.round(nt); selectedKf={objId:obj.id,time:k.t}; currentTime=k.t;
+    if(el) el.style.left=tToX(k.t)+"px";
+    render(); renderInspector();
+  }
+  function up(){
+    window.removeEventListener("pointermove",move);
+    window.removeEventListener("pointerup",up);
+    window.removeEventListener("pointercancel",up);
+    obj.keys.sort((a,b)=>a.t-b.t);
+    renderTimeline(); renderInspector();
+  }
+  window.addEventListener("pointermove",move);
+  window.addEventListener("pointerup",up);
+  window.addEventListener("pointercancel",up);
 }
 
 /* ruler scrub */
